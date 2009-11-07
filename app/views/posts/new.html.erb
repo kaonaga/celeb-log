@@ -1,27 +1,5 @@
 <h1>New post</h1>
 
-<% form_for(@post) do |f| %>
-  <%= f.error_messages %>
-
-  <p>
-    <%= f.label :author %><br />
-    <%= f.text_field :author %>
-  </p>
-  <p>
-    <%= f.label :title %><br />
-    <%= f.text_field :title %>
-  </p>
-  <p>
-    <%= f.label :product %><br />
-    <%= f.text_field :product %>
-  </p>
-  <p>
-    <%= f.label :content %><br />
-    <%= f.text_area :content %>
-  </p>
-  <p>
-    <%= f.submit 'Create' %>
-  </p>
-<% end %>
+<%= render :partial => 'form', :locals => {:zone => 'new', :button_label => 'Create'} %>
 
 <%= link_to 'Back', posts_path %>

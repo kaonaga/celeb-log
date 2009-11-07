@@ -1,13 +1,28 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
 one:
-  author: MyString
-  title: MyString
-  product: MyString
-  content: MyText
+  id: 1
+  blog_id: 1
+  blog_entry_id: 1
+  brand_id: 1
+  product_id: 1
+  content: MyString
+  keyword_index: 100
 
 two:
-  author: MyString
-  title: MyString
-  product: MyString
-  content: MyText
+  id: 2
+  blog_id: 2
+  blog_entry_id: 2
+  brand_id: 2
+  product_id: 2
+  content: MyString
+  keyword_index: 200
+
+three:
+  id: 3
+  blog_id: 2
+  blog_entry_id: 3
+  brand_id: 2
+  product_id: 2
+  content: MyString
+  keyword_index: 300

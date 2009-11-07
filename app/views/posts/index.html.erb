@@ -1,31 +1,33 @@
 <h1>Listing posts</h1>
-
+<div id="banner"><img src="stylesheets/earthlingtwo/images/img07.jpg" alt="" /></div>
+<h2 class="title"><a href="#">Lorem ipsum dolor sit amet </a></h2>
+<p class="meta">Aliquam sit amet tempus sed consequat</p>
 <table>
   <tr>
     <th>Author</th>
-    <th>Title</th>
-    <th>Product</th>
+    <th>Entry Title</th>
+    <th>Brand</th>
+    <!-- <th>Product</th> -->
     <th>Content</th>
+    <th>Posted date</th>
   </tr>
-
 <% @posts.each do |post| %>
   <tr>
-    <td><%=h post.author %></td>
-    <td><%=h post.title %></td>
-    <td><%=h post.product %></td>
-    <td><%=h post.content %></td>
+    <td><%=h post.blog.author %></td>
+    <td><%= link_to post.blog_entry.title, post %></td>
+    <td><%=h post.brand.name %><br>(<%=h post.brand.phonetic %>)</td>
+    <!-- <td>
+      <% unless post.product.nil? %>
+        <%=h post.product.name %>
+      <% end %>
+    </td> -->
+    <td><%= post.blog_entry.content %></td>
+    <td><%=h post.posted_date %></td>
     <td><%= link_to 'Show', post %></td>
     <td><%= link_to 'Edit', edit_post_path(post) %></td>
     <td><%= link_to 'Destroy', post, :confirm => 'Are you sure?', :method => :delete %></td>
   </tr>
 <% end %>
 </table>
-
-<br />
-
-<%= link_to 'New post', new_post_path %>
-
-<br />
-<br />
-
-<%= link_to 'Products Management', products_path %>
+<div class="pagination"><%= will_paginate @posts %></div>
+<div class="navigation"><%= link_to 'New post', new_post_path %></div>

@@ -1,0 +1,44 @@
+<p>
+  <b>Author:</b>
+  <%=h @blog.author %>
+</p>
+
+<p>
+  <b>Phonetic:</b>
+  <%=h @blog.phonetic %>
+</p>
+
+<p>
+  <b>Title:</b>
+  <%=h @blog.title %>
+</p>
+
+<p>
+  <b>Listed count:</b>
+  <%=h @blog.listed_count %>
+</p>
+
+<table>
+<% @posts.each do |post| %>
+  <tr>
+    <td><%=h post.blog.author %></td>
+    <td><%= link_to post.blog_entry.title, post %></td>
+    <td><%=h post.brand.name %><br>(<%=h post.brand.phonetic %>)</td>
+    <!-- <td>
+      <% unless post.product.nil? %>
+        <%=h post.product.name %>
+      <% end %>
+    </td> -->
+    <td><%= post.blog_entry.content %></td>
+    <td><%=h post.posted_date %></td>
+    <td><%= link_to 'Show', post %></td>
+    <td><%= link_to 'Edit', edit_post_path(post) %></td>
+    <td><%= link_to 'Destroy', post, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<div class="pagination"><%= will_paginate @posts %></div>
+<%= link_to 'Edit', edit_blog_path(@blog) %> |
+<%= link_to 'Destroy', @blog, :confirm => 'Are you sure?', :method => :delete %> |
+<%= link_to 'Back', :back %>

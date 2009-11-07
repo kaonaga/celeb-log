@@ -20,10 +20,12 @@ development:
   reconnect: false
   database: celeb-log_development
   pool: 5
-  username: root
-  password:
+  username: mysql
+  password: mysqlclient
   socket: /tmp/mysql.sock
-
+  # for Centos
+  # socket: /var/lib/mysql/mysql.sock
+ 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
@@ -33,16 +35,20 @@ test:
   reconnect: false
   database: celeb-log_test
   pool: 5
-  username: root
-  password:
+  username: mysql
+  password: mysqlclient
   socket: /tmp/mysql.sock
-
+  # for Centos
+  # socket: /var/lib/mysql/mysql.sock
+ 
 production:
   adapter: mysql
   encoding: utf8
   reconnect: false
   database: celeb-log_production
   pool: 5
-  username: root
-  password: 
+  username: mysql
+  password: mysqlclient
   socket: /tmp/mysql.sock
+  # for Centos
+  # socket: /var/lib/mysql/mysql.sock

@@ -6,8 +6,10 @@ class CreateBlogs < ActiveRecord::Migration
       t.string :title
       t.string :uri
       t.string :tags
-      t.integer :crowl_type, :limit => 2
-      t.string :last_update
+      t.integer :crowl_type, :limit => 1
+      t.integer :delete_flg , :limit => 1
+      t.integer :listed_count
+      t.timestamp :last_update
 
       t.timestamps
     end

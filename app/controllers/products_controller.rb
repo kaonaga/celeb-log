@@ -1,8 +1,22 @@
 class ProductsController < ApplicationController
+
+  layout 'posts'
+
+  @@brand_index = Brand.all(:conditions => "delete_flg is null", 
+                            :order => "listed_count DESC", 
+                            :limit => 10
+                            )
+  @@blog_index = Blog.all(:conditions => "delete_flg is null", 
+                          :order => "listed_count DESC", 
+                          :limit => 10
+                          )
+
   # GET /products
   # GET /products.xml
   def index
     @products = Product.all
+    @brand_index = @@brand_index
+    @blog_index = @@blog_index
 
     respond_to do |format|
       format.html # index.html.erb
@@ -14,6 +28,8 @@ class ProductsController < ApplicationController
   # GET /products/1.xml
   def show
     @product = Product.find(params[:id])
+    @brand_index = @@brand_index
+    @blog_index = @@blog_index
 
     respond_to do |format|
       format.html # show.html.erb
@@ -25,6 +41,8 @@ class ProductsController < ApplicationController
   # GET /products/new.xml
   def new
     @product = Product.new
+    @brand_index = @@brand_index
+    @blog_index = @@blog_index
 
     respond_to do |format|
       format.html # new.html.erb
@@ -35,6 +53,8 @@ class ProductsController < ApplicationController
   # GET /products/1/edit
   def edit
     @product = Product.find(params[:id])
+    @brand_index = @@brand_index
+    @blog_index = @@blog_index
   end
 
   # POST /products

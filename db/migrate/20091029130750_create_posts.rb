@@ -2,9 +2,11 @@ class CreatePosts < ActiveRecord::Migration
   def self.up
     create_table :posts do |t|
       t.references :blog
-      t.references :product
       t.references :blog_entry
-      t.text :content
+      t.references :brand
+      t.references :product
+      t.integer :delete_flg, :limit => 1
+      t.timestamp :posted_date
 
       t.timestamps
     end

@@ -1,11 +1,13 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
 one:
-  name: MyString
-  uri: MyString
-  image_string: MyString
+  id: 1
+  name: product_name1
+  uri: product_uri1
+  image_uri: product_image_uri1
 
 two:
-  name: MyString
-  uri: MyString
-  image_string: MyString
+  id: 2
+  name: product_name2
+  uri: product_uri2
+  image_uri: product_image_uri2

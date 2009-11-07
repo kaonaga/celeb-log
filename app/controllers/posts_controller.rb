@@ -1,9 +1,29 @@
 class PostsController < ApplicationController
+
+  @@brand_index = Brand.all(:conditions => "delete_flg is null", 
+                            :order => "listed_count DESC", 
+                            :limit => 10
+                            )
+  @@blog_index = Blog.all(:conditions => "delete_flg is null", 
+                          :order => "listed_count DESC", 
+                          :limit => 10
+                          )
+
   # GET /posts
   # GET /posts.xml
   def index
-    @posts = Post.all
+    # @posts = Post.all
+    @posts = Post.paginate( :page => params[:page], 
+                            :conditions => "delete_flg is NULL", 
+                            :order => "posted_date DESC"
+                          )
+    # keyword highlight
+    @posts = content_thumbnail_highlight(@posts)
 
+    @brand_index = @@brand_index
+    @blog_index = @@blog_index
+
+    # @posts = Post.paginate_by_board_id @board.id, :page => params[:page], :order => 'updated_at DESC'
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @posts }
@@ -14,6 +34,27 @@ class PostsController < ApplicationController
   # GET /posts/1.xml
   def show
     @post = Post.find(params[:id])
+    # keyword highlight
+    @post = content_highlight(@post)
+
+    @brand_index = @@brand_index
+    @blog_index = @@blog_index
+
+    brand_name = @post.brand.name
+    brand_category = @post.brand.category
+    begin
+      @amazon_recommendations = AmazonAwsSearch.item_search(brand_category, {'Brand' => brand_name})
+      # @amazon_recommendations = AmazonAwsSearch.keyword_search("#{brand_name}")
+    rescue => e
+      @amazon_error = e
+    end
+
+    begin
+      @rakuten_recommendations = RakutenSearch.item_search(brand_category, brand_name)
+    rescue  => e
+      @rakuten_error = e
+    end
+    
 
     respond_to do |format|
       format.html # show.html.erb
@@ -25,7 +66,8 @@ class PostsController < ApplicationController
   # GET /posts/new.xml
   def new
     @post = Post.new
-
+    @brand_index = @@brand_index
+    @blog_index = @@blog_index
     respond_to do |format|
       format.html # new.html.erb
       format.xml  { render :xml => @post }
@@ -35,6 +77,8 @@ class PostsController < ApplicationController
   # GET /posts/1/edit
   def edit
     @post = Post.find(params[:id])
+    @brand_index = @@brand_index
+    @blog_index = @@blog_index
   end
 
   # POST /posts
@@ -75,7 +119,9 @@ class PostsController < ApplicationController
   # DELETE /posts/1.xml
   def destroy
     @post = Post.find(params[:id])
-    @post.destroy
+    # @post.destroy
+    @post.delete_flg = 1
+    @post.save
 
     respond_to do |format|
       format.html { redirect_to(posts_url) }

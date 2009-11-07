@@ -1,0 +1,24 @@
+<div id="sidebar">
+  <ul>
+    <li>
+      <h2>Blogs</h2>
+      <ul>
+        <% @blog_index.each do |blog| %>
+          <li><%= link_to blog.author, blog_path(blog.id) %>(<%=h blog.listed_count %>)</li>
+        <% end %>
+        <li><%= link_to "ブログをすべて見る", blogs_path %></li>
+      </ul>
+    </li>
+    <li>
+      <h2>Brands</h2>
+      <ul>
+        <% @brand_index.each do |brand| %>
+          <li><%= link_to brand.name, brand_path(brand.id) %>(<%=h brand.listed_count %>)</li>
+        <% end %>
+        <li><%= link_to "ブランドをすべて見る", brands_path %></li>
+      </ul>
+    </li>
+  </ul>
+</div>
+<!-- end #sidebar -->
+<div style="clear: both;">&nbsp;</div>
