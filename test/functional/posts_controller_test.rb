@@ -35,11 +35,16 @@ class PostsControllerTest < ActionController::TestCase
     assert_redirected_to post_path(assigns(:post))
   end
 
-  test "should destroy post" do
-    assert_difference('Post.count', -1) do
-      delete :destroy, :id => posts(:one).to_param
-    end
+  test "should make delete_flg as 1" do
+    delete :destroy, :id => posts(:one).to_param
+    assert_equal(1, Post.all(:conditions => "delete_flg = 1").count)
 
     assert_redirected_to posts_path
   end
+
+  test "should show listed_count for each brand" do
+    get :index
+    assert_match(/(1)/, @response.body)
+  end
+
 end

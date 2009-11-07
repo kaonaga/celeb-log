@@ -1,0 +1,15 @@
+<% form_for(@brand) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </p>
+  <p>
+    <%= f.label :phonetic %><br />
+    <%= f.text_field :phonetic %>
+  </p>
+  <p>
+    <%= f.submit button_label %>
+  </p>
+<% end %>

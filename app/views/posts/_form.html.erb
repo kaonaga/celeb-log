@@ -1,0 +1,26 @@
+<% form_for(@post) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <b>Author:</b>
+    <%=h @post.blog.author %>
+  </p>
+
+  <p>
+    <b>Entry Title:</b>
+    <%= link_to @post.blog_entry.title, @post.blog_entry.uri, :target => :blank %>
+  </p>
+
+  <p>
+    <b>Brand:</b>
+    <%=h @post.brand.name %>(<%= @post.brand.phonetic %>)
+  </p>
+
+  <p>
+    <%= f.label :content %><br />
+    <%= f.text_field :content %>
+  </p>
+  <p>
+    <%= f.submit button_label %>
+  </p>
+<% end %>

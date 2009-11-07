@@ -1,23 +1,56 @@
 <p>
   <b>Author:</b>
-  <%=h @post.author %>
+  <%=h @post.blog.author %>
 </p>
 
 <p>
-  <b>Title:</b>
-  <%=h @post.title %>
+  <b>Entry Title:</b>
+  <%= link_to @post.blog_entry.title, @post.blog_entry.uri, :target => :blank %>
 </p>
 
 <p>
+  <b>Brand:</b>
+  <%=h @post.brand.name %>(<%= @post.brand.phonetic %>)
+</p>
+
+<!-- <p>
   <b>Product:</b>
   <%=h @post.product %>
-</p>
+</p> -->
 
 <p>
   <b>Content:</b>
-  <%=h @post.content %>
+  <%= @post.blog_entry.content %>
 </p>
 
+<p>
+  <b>Posted Date:</b>
+  <%= @post.posted_date %>
+</p>
+
+<p>
+  <b>Recommendations:</b><br>
+  <% unless @amazon_recommendations.nil? %>
+    <% @amazon_recommendations.each do |r| %>
+      <% unless r.small_image.nil? %>
+        <%= link_to (image_tag r.small_image.url), "#{r.detail_page_url}", :target => :blank %><br>
+        <%= link_to r.item_attributes.title, "#{r.detail_page_url}", :target => :blank %><br>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <% unless @rakuten_recommendations.nil? %>
+    <% @rakuten_recommendations.each do |r| %>
+      <%= link_to (image_tag r.image_url, :height => 75), "#{r.item_url}", :target => :blank %><br>
+      <%= link_to r.item_name, "#{r.item_url}", :target => :blank %><br>
+    <% end %>
+  <% end %>
+</p>
+
+<%= @amazon_error %><br>
+<%= @rakuten_error %><br>
+<br>
 
 <%= link_to 'Edit', edit_post_path(@post) %> |
+<%= link_to 'Destroy', @post, :confirm => 'Are you sure?', :method => :delete %> |
 <%= link_to 'Back', posts_path %>

@@ -1,7 +1,22 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
-# one:
-#   column: value
-#
-# two:
-#   column: value
+one:
+  id: 1
+  blog: 1
+  title: blog_entry_title1
+  content: テストbrand_name1テスト
+  uri: blog_entry_rui1
+
+two:
+  id: 2
+  blog: 2
+  title: blog_entry_title2
+  content: テストbrand_name2テスト
+  uri: blog_entry_rui2
+
+three:
+  id: 3
+  blog: 3
+  title: blog_entry_title3
+  content: テストbrand_name2テスト
+  uri: blog_entry_rui3

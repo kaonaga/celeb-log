@@ -1,7 +1,23 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
-# one:
-#   column: value
-#
-# two:
-#   column: value
+one:
+  id: 1
+  author: blog_author1
+  phonetic: blog_phonetic1
+  title: blog_title1
+  uri: blog_uri1
+  tags: blog_tags1
+  crowl_type: blog_crowl_type1
+  last_update: blog_last_update1
+  listed_count: 1
+
+two:
+  id: 2
+  author: blog_author2
+  phonetic: blog_phonetic
+  title: blog_title2
+  uri: blog_uri2
+  tags: blog_tags2
+  crowl_type: blog_crowl_type2
+  last_update: blog_last_update2
+  listed_count: 2

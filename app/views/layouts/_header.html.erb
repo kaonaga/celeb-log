@@ -1,0 +1,26 @@
+<div id="header">
+  <div id="logo">
+    <h1><a href="/">celeb-log.com</a></h1>
+    <p>by <a href="http://www.nodethirtythree.com">nodethirtythree</a> + <a href="http://www.freecsstemplates.org/">fct</a></p>
+  </div>
+</div>
+<!-- end #header -->
+
+<div id="menu">
+  <ul>
+    <% if controller.controller_name == 'posts' %><li class="current_page_item"><% else %><li><% end %>
+      <%= link_to "Top", {:controller => 'posts', :action => 'index'} %>
+    </li>
+    <% if controller.controller_name == 'blogs' %><li class="current_page_item"><% else %><li><% end %>
+      <%= link_to "Blogs", {:controller => 'blogs', :action => 'index'} %>
+    </li>
+    <% if controller.controller_name == 'brands' %><li class="current_page_item"><% else %><li><% end %>
+      <%= link_to "Brands", {:controller => 'brands', :action => 'index'} %>
+    </li>
+    <% if controller.controller_name == 'products' %><li class="current_page_item"><% else %><li><% end %>
+      <%= link_to "Products", {:controller => 'products', :action => 'index'} %>
+    </li>
+    <li><a href="#">Contact</a></li>
+  </ul>
+</div>
+<!-- end #menu -->
