@@ -118,6 +118,7 @@ class CrowlBlogs
   end
 
   def self.insert_blog(author, phonetic, tags, uri, title, crowl_type, time)
+
     object = Mysql::new(@@mysql_host, @@mysql_user, @@mysql_password, @@mysql_db)
     blog_id = object.query("select id from blogs where uri = '#{uri}'").fetch_hash
     if blog_id.nil?

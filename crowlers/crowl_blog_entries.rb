@@ -365,6 +365,7 @@ class CrowlBlogEntries
   def self.insert_blog_entry(blog_id, title, content, uri, date)
     object = Mysql::new(@@mysql_host, @@mysql_user, @@mysql_password, @@mysql_db)
     if object.query("select id from blog_entries where blog_id = #{blog_id} and uri = '#{uri}'").fetch_hash.nil?
+
       object.query("insert into blog_entries (blog_id, title, content, uri, created_at, updated_at) values('#{blog_id}', '#{title}', '#{content}', '#{uri}', '#{date}', '#{date}')")
       # start debug
       puts "=> 1 row inserted nto blog_entries successfully"

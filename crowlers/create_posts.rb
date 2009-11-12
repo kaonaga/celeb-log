@@ -2,6 +2,7 @@
 
 class CreatePosts
   require 'net/http'
+  require 'net/pop'
   require 'cgi'
   require 'mysql'
   require 'date'
@@ -13,6 +14,14 @@ class CreatePosts
   @@mysql_user = 'mysql'
   @@mysql_password = 'mysqlclient'
   @@mysql_db = 'celeb-log_development'
+
+  USE_APOP = false
+  POP_SERVER = {
+    :address => 'mail.MyDNS.JP',
+    :port => 110,
+    :account => 'mydns28275',
+    :password => 'vH3Dsty4'
+    }
 
   def self.create_posts
     # how many words to get around the keyword
@@ -164,8 +173,23 @@ class CreatePosts
     object.close
     ng_flg
   end
+
+  def self.dns_health_check
+    # consoleからkickする場合
+    # script/runner -e development "app = ActionController::Integration::Session.new; app.get 'posts/new/mail'"
+    begin
+      # Net::POP3.enable_ssl(OpenSSL::SSL::VERIFY_NONE)
+      Net::POP3.APOP(USE_APOP).start(POP_SERVER[:address],
+                                     POP_SERVER[:port],
+                                     POP_SERVER[:account],
+                                     POP_SERVER[:password])
+    rescue => e
+      p e
+    end
+  end
 end
 
 CreatePosts.create_posts
 CreatePosts.create_blog_listed_count
 CreatePosts.create_brand_listed_count
+CreatePosts.dns_health_check
