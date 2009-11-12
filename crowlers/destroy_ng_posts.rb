@@ -6,6 +6,7 @@ class DestroyNgPosts
   require 'mysql'
   require 'date'
   require 'nkf'
+  require 'logger'
   $KCODE = 'UTF8'
 
   # port = 80
@@ -13,6 +14,9 @@ class DestroyNgPosts
   @@mysql_user = 'mysql'
   @@mysql_password = 'mysqlclient'
   @@mysql_db = 'celeb-log_development'
+
+  @@logger = Logger.new("/Users/BillEvans/Workspace/celeb-log/log/crowl.log", 'daily')
+  # @@logger = Logger.new("/var/www/html/celeb-log/log/crowl.log", 'daily')
 
   def self.destroy_ng_posts
     object = Mysql::new(@@mysql_host, @@mysql_user, @@mysql_password, @@mysql_db)
@@ -31,6 +35,7 @@ class DestroyNgPosts
       brand_delete_flg = post_hash['brands.delete_flg']
 
       # start debug
+      @@logger.debug("post: #{post_id}, brand:#{brand_id}: #{name} (#{phonetic})")
       puts "post: #{post_id}, brand:#{brand_id}: #{name} (#{phonetic})"
       # end debug
 
@@ -38,6 +43,7 @@ class DestroyNgPosts
       unless brand_delete_flg.nil?
         object.query("update posts set delete_flg = 1 where id = #{post_id}")
         # start debug
+        @@logger.debug("=> post #{post_id} is destroyed because its brand #{name} is no longer available\r\n\r\n")
         puts "=> post #{post_id} is destroyed because its brand #{name} is no longer available\r\n\r\n"
         # end debug
         next
@@ -58,7 +64,7 @@ class DestroyNgPosts
             unless ng_flg.nil?
               object.query("update posts set delete_flg = 1 where id = #{post_id}")
               # start debug
-              puts "=> post #{post_id} is destroyed because of NG Word #{ng_flg}\r\n\r\n"
+              @@logger.debug("=> post #{post_id} is destroyed because of NG Word #{ng_flg}\r\n\r\n")
               # end debug
               break
             end
@@ -81,6 +87,7 @@ class DestroyNgPosts
         listed_count = object.query("select count(id) count from posts where blog_id = #{blog_id} and delete_flg is null").fetch_hash['count']
         object.query("update blogs set listed_count = #{listed_count} where id = #{blog_id}")
         # start debug
+        @@logger.debug("=> blog_id = #{blog_id}: listed_count = #{listed_count}")
         puts "=> blog_id = #{blog_id}: listed_count = #{listed_count}"
         # end debug
       end
@@ -100,6 +107,7 @@ class DestroyNgPosts
         listed_count = object.query("select count(id) count from posts where brand_id = #{brand_id} and delete_flg is null").fetch_hash['count']
         object.query("update brands set listed_count = '#{listed_count}' where id = '#{brand_id}'")
         # start debug
+        @@logger.debug("=> brand_id = #{brand_id}: listed_count = #{listed_count}")
         puts "=> brand_id = #{brand_id}: listed_count = #{listed_count}"
         # end debug
       end

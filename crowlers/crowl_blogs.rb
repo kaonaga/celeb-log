@@ -4,6 +4,7 @@ class CrowlBlogs
   require 'net/http'
   require 'mysql'
   require 'date'
+  require 'logger'
   $KCODE = 'UTF8'
 
   @@mysql_host = 'localhost'
@@ -16,6 +17,8 @@ class CrowlBlogs
                 # 3 => 'star-studio.jp', 
                 # 4 => 'www2.studio-fumina.com'
                 }
+  @@logger = Logger.new("/Users/BillEvans/Workspace/celeb-log/log/crowl.log", 'daily')
+  # @@logger = Logger.new("/var/www/html/celeb-log/log/crowl.log", 'daily')
 
   def self.crowl_ameblo
     # start iteration for ameblo
@@ -44,6 +47,12 @@ class CrowlBlogs
         self.insert_blog(author, phonetic, tags, uri, title, crowl_type, time)
 
         # start debug
+        @@logger.debug(author)
+        @@logger.debug(title)
+        @@logger.debug(uri)
+        @@logger.debug(tags)
+        @@logger.debug("crowl_type = #{crowl_type}")
+        @@logger.debug("\r\n")
         puts author
         puts title
         puts uri
@@ -75,12 +84,18 @@ class CrowlBlogs
       self.insert_blog(author, phonetic, tags, uri, title, crowl_type, time)
 
       # start debug
-      p author
-      p title
-      p uri
-      p tags
+      @@logger.debug(author)
+      @@logger.debug(title)
+      @@logger.debug(uri)
+      @@logger.debug(tags)
+      @@logger.debug("crowl_type = #{crowl_type}")
+      @@logger.debug("\r\n")
+      puts author
+      puts title
+      puts uri
+      puts tags
       puts "crowl_type = #{crowl_type}"
-      puts "\r\n"
+      puts "\r\n\r\n"
       # end debug
 
     end
@@ -100,6 +115,12 @@ class CrowlBlogs
     self.insert_blog(author, phonetic, tags, uri, title, crowl_type, time)
 
     # start debug
+    @@logger.debug(author)
+    @@logger.debug(title)
+    @@logger.debug(uri)
+    @@logger.debug(tags)
+    @@logger.debug("crowl_type = #{crowl_type}")
+    @@logger.debug("\r\n")
     puts author
     puts title
     puts uri
@@ -126,6 +147,7 @@ class CrowlBlogs
     else
       object.query("update blogs set author = '#{author}', phonetic = '#{phonetic}', title = '#{title}', uri = '#{uri}', tags = '#{tags}', crowl_type = '#{crowl_type}', updated_at = '#{time}' where uri = '#{uri}'")
       # start debug
+      @@logger.debug("this blog has been already listed as id:#{blog_id['id']}")
       puts "this blog has been already listed as id:#{blog_id['id']}"
       # end debug
     end

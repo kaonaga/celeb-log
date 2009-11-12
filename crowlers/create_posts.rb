@@ -7,6 +7,7 @@ class CreatePosts
   require 'mysql'
   require 'date'
   require 'nkf'
+  require 'logger'
   $KCODE = 'UTF8'
 
   # port = 80
@@ -14,6 +15,9 @@ class CreatePosts
   @@mysql_user = 'mysql'
   @@mysql_password = 'mysqlclient'
   @@mysql_db = 'celeb-log_development'
+
+  @@logger = Logger.new("/Users/BillEvans/Workspace/celeb-log/log/crowl.log", 'daily')
+  # @@logger = Logger.new("/var/www/html/celeb-log/log/crowl.log", 'daily')
 
   USE_APOP = false
   POP_SERVER = {
@@ -39,6 +43,7 @@ class CreatePosts
       escaped_phonetic = phonetic.gsub("'", "''")
 
       # start debug
+      @@logger.debug("#{brand_id}: #{name} (#{phonetic})")
       puts "#{brand_id}: #{name} (#{phonetic})"
       # end debug
 
@@ -73,7 +78,7 @@ class CreatePosts
           #   # unless /[^a-zA-Z\\\/;:]+#{name}[^a-zA-Z\\\/;:]+/ =~ content.split(//u).slice(content_from, content_to).join.gsub("'", "''")
           #   unless /[^a-zA-Z\\\/;:]+#{name}[^a-zA-Z\\\/;:]+/ =~ content
           #     # start debug
-          #     puts "=> brand name cannot be specified\r\n"
+          #     @@logger.debug("=> brand name cannot be specified\r\n")
           #     # end debug
           #     next
           #   end
@@ -89,6 +94,8 @@ class CreatePosts
                   begin
                     object.query("insert into posts (blog_id, blog_entry_id, brand_id, product_id, posted_date, created_at, updated_at) values(#{blog_id}, #{blog_entry_id}, '#{brand_id}', 'NULL', '#{posted_date}', '#{time}', '#{time}')")
                     # start debug
+                    @@logger.debug("hit by #{m}")
+                    @@logger.debug("=> 1 row inserted into posts successfully\r\n\r\n")
                     puts "hit by #{m}"
                     puts "=> 1 row inserted into posts successfully\r\n\r\n"
                     # end debug
@@ -96,10 +103,14 @@ class CreatePosts
                     p error
                   end
                 else
+                  @@logger.debug("=> this content has NG Word(s) and not collected\r\n\r\n")
                   puts "=> this content has NG Word(s) and not collected\r\n\r\n"
                 end
               else
                 # start debug
+                @@logger.debug("blog_id = #{blog_id}")
+                @@logger.debug("blog_entry_id = #{blog_entry_id}")
+                @@logger.debug("=> This post has been already created\r\n\r\n")
                 puts "blog_id = #{blog_id}"
                 puts "blog_entry_id = #{blog_entry_id}"
                 puts "=> This post has been already created\r\n\r\n"
@@ -127,6 +138,7 @@ class CreatePosts
         listed_count = object.query("select count(id) count from posts where blog_id = #{blog_id} and delete_flg is null").fetch_hash['count']
         object.query("update blogs set listed_count = #{listed_count} where id = #{blog_id}")
         # start debug
+        @@logger.debug("=> blog_id = #{blog_id}: listed_count = #{listed_count}")
         puts "=> blog_id = #{blog_id}: listed_count = #{listed_count}"
         # end debug
       end
@@ -146,6 +158,7 @@ class CreatePosts
         listed_count = object.query("select count(id) count from posts where brand_id = #{brand_id} and delete_flg is null").fetch_hash['count']
         object.query("update brands set listed_count = '#{listed_count}' where id = '#{brand_id}'")
         # start debug
+        @@logger.debug("=> brand_id = #{brand_id}: listed_count = #{listed_count}")
         puts "=> brand_id = #{brand_id}: listed_count = #{listed_count}"
         # end debug
       end
@@ -164,6 +177,7 @@ class CreatePosts
       while ng_word = ng_words_query.fetch_hash
         if /(#{ng_word['ng_word']})/ =~ line
           ng_flg = $1
+          @@logger.debug("#{ng_word['ng_word']} was detected as NG Word\r\n")
           puts "#{ng_word['ng_word']} was detected as NG Word\r\n"
           break
         end

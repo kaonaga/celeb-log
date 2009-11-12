@@ -7,6 +7,7 @@ class CrowlBlogEntries
   require 'mysql'
   require 'date'
   require 'nkf'
+  require 'logger'
   $KCODE = 'UTF8'
 
   @@mysql_host = 'localhost'
@@ -33,6 +34,8 @@ class CrowlBlogEntries
                   'www.smooche.jp' => 2
                   }
 
+  @@logger = Logger.new("/Users/BillEvans/Workspace/celeb-log/log/crowl.log", 'daily')
+  # @@logger = Logger.new("/var/www/html/celeb-log/log/crowl.log", 'daily')
   def self.crowl_ameblo_entries
     # start iteration for each blog
     blog_query = blog_query(@@crowl_type['ameblo.jp'])
@@ -42,7 +45,7 @@ class CrowlBlogEntries
       crowl_type = 0
 
       # flag to decide whether to crowl the next page or not
-      next_page_flg = 1
+      next_page_flg = true
 
       # page number to crowl
       i = 1
@@ -119,6 +122,12 @@ class CrowlBlogEntries
             # end date format modification
 
             # start debug
+            @@logger.debug("\r\n\r\n")
+            @@logger.debug(blog_id)
+            @@logger.debug(date)
+            @@logger.debug(title)
+            # @@logger.debug(content)
+            @@logger.debug(uri)
             puts "\r\n\r\n"
             puts blog_id
             puts date
@@ -127,29 +136,33 @@ class CrowlBlogEntries
             puts uri
             # end debug
 
-            insert_blog_entry(blog_id, title, content, uri, date)
+            next_page_flg = insert_blog_entry(blog_id, title, content, uri, date)
           end
           # end iteration for each post
 
-          # see whether to crowl the next page or not
-          if body.scan(/<a href=".+?" class="nextPage" title="次のページへ">次ページ&nbsp;&gt;&gt;<\/a>/) == []
-            next_page_flg = nil
-            # start debug
-            puts "=> stop crowl this blog"
-            # end debug
-          else
-            i += 1
-            # start debug
-            puts "=> crowl next page"
-            # end debug
+          unless next_page_flg.nil?
+            # see whether to crowl the next page or not
+            if body.scan(/<a href=".+?" class="nextPage" title="次のページへ">次ページ&nbsp;&gt;&gt;<\/a>/) == []
+              next_page_flg = nil
+              # start debug
+              @@logger.debug("=> stop crowl this blog")
+              puts "=> stop crowl this blog"
+              # end debug
+            else
+              i += 1
+              # start debug
+              @@logger.debug("=> crowl next page")
+              puts "=> crowl next page"
+              # end debug
+            end
           end
 
           sleep 0.5
 
           # local test setting
-          if i >= 2
-            next_page_flg = nil
-          end
+          # if i >= 2
+          #   next_page_flg = nil
+          # end
           # end local test setting
 
         rescue => error
@@ -174,7 +187,7 @@ class CrowlBlogEntries
       crowl_type = 1
 
       # flag to decide whether to crowl the next page or not
-      next_page_flg = 1
+      next_page_flg = true
       # page number to crowl
       i = 0
       # start iteration for each page
@@ -193,6 +206,12 @@ class CrowlBlogEntries
             date = m[3] + ":00"
 
             # start debug
+            @@logger.debug("\r\n\r\n")
+            @@logger.debug(blog_id)
+            @@logger.debug(date)
+            @@logger.debug(title)
+            # @@logger.debug(content)
+            @@logger.debug(uri)
             puts "\r\n\r\n"
             puts blog_id
             puts date
@@ -201,29 +220,33 @@ class CrowlBlogEntries
             puts uri
             # end debug
 
-            insert_blog_entry(blog_id, title, content, uri, date)
+            next_page_flg = insert_blog_entry(blog_id, title, content, uri, date)
           end
           # end iteration for each post
 
-          # see whether to crowl the next page or not
-          if body.scan(/<a href=".+?" class="pagerLink">次へ&gt;&gt;<\/a>/) == []
-            next_page_flg = nil
-            # start debug
-            puts "=> stop crowl this blog"
-            # end debug
-          else
-            i += 1
-            # start debug
-            puts "=> crowl next page"
-            # end debug
+          unless next_page_flg.nil?
+            # see whether to crowl the next page or not
+            if body.scan(/<a href=".+?" class="pagerLink">次へ&gt;&gt;<\/a>/) == []
+              next_page_flg = nil
+              # start debug
+              @@logger.debug("=> stop crowl this blog")
+              puts "=> stop crowl this blog"
+              # end debug
+            else
+              i += 1
+              # start debug
+              @@logger.debug("=> crowl next page")
+              puts "=> crowl next page"
+              # end debug
+            end
           end
 
           sleep 0.5
 
           # local test setting
-          if i >= 3
-            next_page_flg = nil
-          end
+          # if i >= 3
+          #   next_page_flg = nil
+          # end
           # end local test setting
 
         rescue => error
@@ -256,6 +279,9 @@ class CrowlBlogEntries
         latest_title = NKF.nkf('-w', match[0][1]).gsub("'", "''")
 
         # start debug
+        @@logger.debug("latest post title = #{latest_title}")
+        @@logger.debug(latest_index)
+        @@logger.debug("\r\n")
         puts "latest post title = #{latest_title}"
         puts latest_index
         puts "\r\n"
@@ -270,7 +296,7 @@ class CrowlBlogEntries
       # end search the latest post
 
       # flag to decide whether to crowl the next page or not
-      next_page_flg = 1
+      next_page_flg = true
       # page number to crowl
       next_page_uri = latest_index
       # start iteration for each page
@@ -291,6 +317,11 @@ class CrowlBlogEntries
             content = NKF.nkf('-w', match[0][2]).gsub(/<.+?>/m, "").gsub("'", "''")
 
             # start debug
+            @@logger.debug(blog_id)
+            @@logger.debug(date)
+            @@logger.debug(title)
+            # @@logger.debug(content)
+            @@logger.debug(uri)
             puts blog_id
             puts date
             puts title
@@ -298,7 +329,7 @@ class CrowlBlogEntries
             puts uri
             # end debug
 
-            insert_blog_entry(blog_id, title, content, uri, date)
+            next_page_flg = insert_blog_entry(blog_id, title, content, uri, date)
           else
             match = NKF.nkf('-w', body).scan(/<span class="date.+">(.+?)\(.+?\) <\/span>.+?<h3 class="title">(.+?) <\/h3>.+?<p class="newsFoot">Posted by 梨花 @(.+?)<\/p>/m)
             unless match == []
@@ -308,6 +339,11 @@ class CrowlBlogEntries
               title = NKF.nkf('-w', match[0][1]).gsub("'", "''")
 
               # start debug
+              @@logger.debug(blog_id)
+              @@logger.debug(date)
+              @@logger.debug(title)
+              @@logger.debug("content is nil")
+              @@logger.debug(uri)
               puts blog_id
               puts date
               puts title
@@ -315,25 +351,27 @@ class CrowlBlogEntries
               puts uri
               # end debug
 
-              insert_blog_entry(blog_id, title, 'NULL', uri, date)
-              puts "=> content does not have any text"
+              next_page_flg = insert_blog_entry(blog_id, title, 'NULL', uri, date)
+              @@logger.debug("=> content does not have any text")
             else
-              puts "=> content does not match the crowl format"
+              @@logger.debug("=> content does not match the crowl format")
             end
           end
 
-          # see whether to crowl the next page or not
-          result = body.scan(/<ul id="newsNaviBox">.+?<li id="entryBack"><a href="(.+?)">&lt;&lt; (.+?)<\/a>/m)
-          if result == []
-            next_page_uri = nil
-            # start debug
-            puts "=> stop crowl this blog\r\n\r\n"
-            # end debug
-          else
-            next_page_uri = result[0][0]
-            # start debug
-            puts "=> crowl next page: #{blog_uri}#{next_page_uri}\r\n\r\n"
-            # end debug
+          unless next_page_flg.nil?
+            # see whether to crowl the next page or not
+            result = body.scan(/<ul id="newsNaviBox">.+?<li id="entryBack"><a href="(.+?)">&lt;&lt; (.+?)<\/a>/m)
+            if result == []
+              next_page_uri = nil
+              # start debug
+              @@logger.debug("=> stop crowl this blog\r\n\r\n")
+              # end debug
+            else
+              next_page_uri = result[0][0]
+              # start debug
+              @@logger.debug("=> crowl next page: #{blog_uri}#{next_page_uri}\r\n\r\n")
+              # end debug
+            end
           end
 
           sleep 0.5
@@ -365,30 +403,36 @@ class CrowlBlogEntries
   def self.insert_blog_entry(blog_id, title, content, uri, date)
     object = Mysql::new(@@mysql_host, @@mysql_user, @@mysql_password, @@mysql_db)
     if object.query("select id from blog_entries where blog_id = #{blog_id} and uri = '#{uri}'").fetch_hash.nil?
-
       object.query("insert into blog_entries (blog_id, title, content, uri, created_at, updated_at) values('#{blog_id}', '#{title}', '#{content}', '#{uri}', '#{date}', '#{date}')")
+
       # start debug
+      @@logger.debug("=> 1 row inserted nto blog_entries successfully")
       puts "=> 1 row inserted nto blog_entries successfully"
       # end debug
+
       last_update = object.query("select last_update from blogs where id = #{blog_id}").fetch_hash['last_update']
       if Time.local(date) > Time.local(last_update)
-        object.query("update blogs set last_update = '#{date}' where id = '#{blog_id}'")
+        object.query("update blogs set last_update = '#{date}' where id = '#{blog_id}'");
+
         # start debug
+        @@logger.debug("last_update = #{last_update}")
+        @@logger.debug("this article's published date = #{date}")
+        @@logger.debug("=> update blogs set last_update = '#{date}' where id = '#{blog_id}'")
         puts "last_update = #{last_update}"
         puts "this article's published date = #{date}"
         puts "=> update blogs set last_update = '#{date}' where id = '#{blog_id}'"
         # end debug
       end
+      object.close
+      true
     else
       # start debug
-      puts "=> this article has been already crowled"
+      @@logger.debug("=> this article has been already crowled")
       # end debug
 
-      # for only the latest post
-      # next_page_flg = nil
-      # break
+      object.close
+      nil
     end
-    object.close
   end
 
   def self.fetch( uri_str, limit = 10 )
