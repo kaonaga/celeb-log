@@ -15,6 +15,12 @@ class BrandsController < ApplicationController
   @@main_title = "芸能人のブログで話題のブランドをさがすならセレブログ"
   @@main_keyword = ["芸能人", "ブログ"]
   @@main_description = @@main_title + "です。"
+  year = Time.new.year
+  unless year == 2009
+    @@year = "2009 - " + year.to_s
+  else
+    @@year = year
+  end
 
   # GET /brands
   # GET /brands.xml
@@ -29,6 +35,7 @@ class BrandsController < ApplicationController
     @title = "芸能人がブログで紹介しているブランドがわかる | " + @@main_title
     @meta_keywords = @@main_keyword[0] + "," + @@main_keyword[1]
     @meta_description = @@main_keyword[0] + " " + @@main_keyword[1]+ "。" + @@main_description
+    @year = @@year
 
     respond_to do |format|
       format.html # index.html.erb
@@ -53,6 +60,7 @@ class BrandsController < ApplicationController
     @title = "#{@brand.name} 芸能人のブログで紹介されている#{@brand.name} | " + @@main_title
     @meta_keywords = @@main_keyword[0] + "," + @@main_keyword[1] + "," + @brand.name
     @meta_description = "#{@@main_keyword[0]} #{@brand.name}。 芸能人のブログで紹介されている#{@brand.name}です。"
+    @year = @@year
 
     respond_to do |format|
       format.html # show.html.erb

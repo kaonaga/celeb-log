@@ -13,6 +13,12 @@ class PostsController < ApplicationController
   @@main_title = "芸能人のブログで話題の商品をさがすならセレブログ"
   @@main_keyword = ["芸能人", "ブログ"]
   @@main_description = @@main_title + "です。"
+  year = Time.new.year
+  unless year == 2009
+    @@year = "2009 - " + year.to_s
+  else
+    @@year = year
+  end
 
   # GET /posts
   # GET /posts.xml
@@ -32,6 +38,7 @@ class PostsController < ApplicationController
     @title = "芸能人がブログで紹介している商品がわかる | " + @@main_title
     @meta_keywords = @@main_keyword[0] + "," + @@main_keyword[1]
     @meta_description = @@main_keyword[0] + " " + @@main_keyword[1]+ "。" + @@main_description
+    @year = @@year
 
     # @posts = Post.paginate_by_board_id @board.id, :page => params[:page], :order => 'updated_at DESC'
     respond_to do |format|
@@ -69,6 +76,7 @@ class PostsController < ApplicationController
     @title = "#{@post.blog.author} #{brand_name} #{@post.blog.author}さんがブログでおすすめする#{brand_name} | " + @@main_title
     @meta_keywords = @post.blog.author + "," + brand_name + "," + @@main_keyword[1]
     @meta_description = "#{@post.blog.author} #{brand_name}。#{@post.blog.author}さんがブログでおすすめする#{brand_name}です。"
+    @year = @@year
 
     respond_to do |format|
       format.html # show.html.erb

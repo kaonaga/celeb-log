@@ -17,10 +17,10 @@
     <% if controller.controller_name == 'brands' %><li class="current_page_item"><% else %><li><% end %>
       <%= link_to "Brands", {:controller => 'brands', :action => 'index'} %>
     </li>
-    <% if controller.controller_name == 'products' %><li class="current_page_item"><% else %><li><% end %>
+    <!-- <% if controller.controller_name == 'products' %><li class="current_page_item"><% else %><li><% end %>
       <%= link_to "Products", {:controller => 'products', :action => 'index'} %>
     </li>
-    <li><a href="#">Contact</a></li>
+    <li><a href="#">Contact</a></li> -->
     <% unless logged_in? %>
       <% if controller.controller_name == "sessions" %>
         <li class="current_page_item">

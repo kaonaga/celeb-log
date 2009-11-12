@@ -1,21 +1,19 @@
 <div id="footer-content">
 	<div class="column1">
-		<h2>Volutpat quisque sed et aliquam</h2>
-		<p><strong>Maecenas ut ante</strong> eu velit laoreet tempor accumsan vitae nibh. Aenean commodo, tortor eu porta convolutpat elementum. Proin fermentum molestie erat eget vehicula. Aenean eget tellus mi. Fusce scelerisque odio quis ante bibendum sollicitudin. Suspendisse potenti. Vivamus quam odio, facilisis at ultrices nec, sollicitudin ac risus. Donec ut odio ipsum, sed tincidunt. <a href="#">Learn more&#8230;</a></p>
-	</div>
-	<div class="column2">
+		<h4><%= link_to '芸能人のブログで話題の商品をさがすならセレブログ', '/' %></h4>
 		<ul class="list">
-			<li><a href="#">Tempor accumsan vitae sed nibh dolore</a></li>
-			<li><a href="#">Aenean commodo, tortor eu porta veroeros</a></li>
-			<li><a href="#">Fermentum molestie erat eget consequat</a></li>
-			<li><a href="#">Donec vestibulum interdum diam etiam</a></li>
-			<li><a href="#">Vehicula aenean eget sed tellus blandit</a></li>
+			<li><%= link_to 'Post', posts_path %></li>
+			<li><%= link_to 'Blog', blogs_path %></li>
+			<li><%= link_to 'Brand', brands_path %></li>
+			<li><%= link_to 'About', '#' %></li>
+			<li><%= link_to 'Contant', '#' %></li>
 		</ul>
 	</div>
 </div>
 <!-- end #fotter-content -->
 
 <div id="footer">
-	<p> (c) 2009 Sitename.com. Design by <a href="http://www.nodethirtythree.com">nodethirtythree</a> and <a href="http://www.freecsstemplates.org">Free CSS Templates</a>.</p>
+	<p>(c) <%= @year %> <%= link_to 'celeb-log.info', 'http://celeb-log.info'%><br>
+	  Presented by <%= link_to 'Ichigoichie corp.', "http://ichigoichie.com" %></p>
 </div>
 <!-- end #footer -->
