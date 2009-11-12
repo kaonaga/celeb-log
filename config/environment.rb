@@ -41,5 +41,5 @@ Rails::Initializer.run do |config|
   # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}')]
   config.i18n.default_locale = :ja
 
-  config.logger = Logger.new(config.log_path, 10, 10.megabytes)
+  config.logger = Logger.new(config.log_path, 10, 10*1024*1024)
 end
