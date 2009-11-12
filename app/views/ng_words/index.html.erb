@@ -1,0 +1,21 @@
+<h1>Listing ng_words</h1>
+
+<table>
+  <tr>
+    <th>Brand</th>
+    <th>Phonetic</th>
+    <th>Ng Word</th>
+  </tr>
+
+<% @ng_words.each do |ng_word| %>
+  <tr>
+    <td><%=h ng_word.brand.name %></td>
+    <td><%=h ng_word.brand.phonetic %></td>
+    <td><%=h ng_word.ng_word %></td>
+    <td><%= link_to 'Show', ng_word %></td>
+    <td><%= link_to 'Edit', edit_ng_word_path(ng_word) %></td>
+    <td><%= link_to 'Destroy', ng_word, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+<div class="pagination"><%= will_paginate @posts %></div>

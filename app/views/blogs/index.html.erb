@@ -6,17 +6,20 @@
 
 <% @blogs.each do |blog| %>
   <tr>
-    <td><%= link_to blog.author, blog_path(blog.id) %></td>
-    <td><%= link_to blog.title, blog_path(blog.id) %></td>
-    <td><%= link_to blog.listed_count, blog_path(blog.id) %></td>
-    
-    <td><%= link_to 'Show', blog %></td>
-    <td><%= link_to 'Edit', edit_blog_path(blog) %></td>
-    <td><%= link_to 'Destroy', blog, :confirm => 'Are you sure?', :method => :delete %></td>
+    <td><%= link_to blog.author, blog %></td>
+    <td><%= link_to blog.title, blog %></td>
+    <td><%= link_to blog.listed_count, blog %></td>
+    <% if @session[:user_id] == 1 %>
+      <td><%= link_to 'Edit', edit_blog_path(blog) %></td>
+      <td><%= link_to 'Destroy', blog, :confirm => 'Are you sure?', :method => :delete %></td>
+    <% end %>
   </tr>
 <% end %>
 </table>
 
 <br />
 <div class="pagination"><%= will_paginate @brands %></div>
-<%= link_to 'New blog', new_blog_path %>
+
+<% if @session[:user_id] == 1 %>
+  <%= link_to 'New blog', new_blog_path %>
+<% end %>

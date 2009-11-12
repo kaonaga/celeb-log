@@ -237,7 +237,6 @@ h2 a {
 .post .title {
 	height: 38px;
 	margin-bottom: 10px;
-	padding: 12px 0 0 0px;
 	letter-spacing: -.5px;
 	font-size: 36px;
 	color: #493E2B;
@@ -270,12 +269,48 @@ h2 a {
 }
 
 .post .entry {
-	padding: 25px 0px 0px 0px;
 	text-align: justify;
 }
 
 .post .entry .title {
 	background: url(images/img08.jpg) no-repeat left bottom;
+}
+
+.post .entry h1 {
+	margin-bottom: 20px;
+	line-height: 1.2em;
+}
+
+.recommendations {
+	width: 570px;
+	height: 200px;
+}
+
+.recommendations ul {
+}
+
+.recommendations li {
+	width: 100px;
+	float: left;
+	height: 75px;
+	padding-right: 7px;
+	padding-left: 7px;
+}
+.recommendations img {
+	margin-top: 1px;
+	margin-bottom: 1px;
+}
+
+.rec_text {
+	clear: both;
+	float: left;
+	width: 570px;
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+.navi {
+	clear: both;
+	float: left;
 }
 
 .links {
@@ -325,23 +360,10 @@ h2 a {
 }
 
 #sidebar li li {
-	line-height: 35px;
+	line-height: 1.4em;
 	margin: 0px;
 	padding: 2px 0px;
 	border-left: none;
-}
-
-#sidebar li li span {
-	height: 19px;
-	margin-right: 16px;
-	padding: 4px 12px;
-	background: #3D2A0B url(images/img12.jpg) repeat-x left top;
-	font-size: 12px;
-	color: #FFFFFF;
-}
-
-#sidebar li li span a {
-	color: #FFFFFF;
 }
 
 #sidebar h2 {
@@ -429,10 +451,6 @@ h2 a {
 
 #footer-content a:hover {
 	color: #AA8B55;
-}
-
-.list li {
-	margin-bottom: 6px;
 }
 
 #footer {

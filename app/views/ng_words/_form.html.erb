@@ -1,0 +1,31 @@
+<% form_for(@ng_word) do |f| %>
+  <%= f.error_messages %>
+  <p>
+    <%= f.label :brand_id %><br />
+    <%= f.text_field :brand_id %><br />
+    <%= @brand.name %>
+    <%= @brand.phonetic %>
+  </p>
+  <p>
+    <%= f.label :ng_word %><br />
+    <%= f.text_field :ng_word %>
+  </p>
+  <p>
+    <% if @ng_word.ng_type == 0 or @ng_word.ng_type.nil? %>
+      <%= radio_button_tag(:ng_type, "phonetic", :checked => true) %>
+    <% else %>
+      <%= radio_button_tag(:ng_type, "phonetic") %>
+    <% end %>
+      <%= label_tag(:ng_type, "読み") %>
+
+    <% if @ng_word.ng_type == 1 %>
+      <%= radio_button_tag(:ng_type, "name", :checked => true) %>
+    <% else %>
+      <%= radio_button_tag(:ng_type, "name") %>
+    <% end %>
+      <%= label_tag(:ng_type, "英語表記") %>
+  </p>
+  <p>
+    <%= f.submit button_label %>
+  </p>
+<% end %>

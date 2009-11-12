@@ -1,13 +1,15 @@
 #!/opt/local/bin/ruby
 
 # Watch out for 4℃(ヨンドシー)!
+# Fresh Carma, not Fresh
 
 class CrowlBrands
   require 'net/http'
   require 'mysql'
-  require 'dbi'
+  require 'date'
   require 'cgi'
   require 'nkf'
+  $KCODE = 'UTF8'
 
   @@mysql_host = 'localhost'
   @@mysql_user = 'mysql'

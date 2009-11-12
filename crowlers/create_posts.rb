@@ -4,8 +4,9 @@ class CreatePosts
   require 'net/http'
   require 'cgi'
   require 'mysql'
-  require 'dbi'
+  require 'date'
   require 'nkf'
+  $KCODE = 'UTF8'
 
   # port = 80
   @@mysql_host = 'localhost'
@@ -29,11 +30,12 @@ class CreatePosts
       escaped_phonetic = phonetic.gsub("'", "''")
 
       # start debug
-      puts "\r\n#{brand_id}: #{name} (#{phonetic})"
+      puts "#{brand_id}: #{name} (#{phonetic})"
       # end debug
 
       # iteration for blog entries
-      entry_query = object.query("select id, blog_id, content, created_at from blog_entries where content like '%#{escaped_name}%' or content like '%#{escaped_phonetic}%'")
+      # entry_query = object.query("select id, blog_id, content, created_at from blog_entries where content like '%#{escaped_name}%' or content like '%#{escaped_phonetic}%'")
+      entry_query = object.query("select id, blog_id, content, created_at from blog_entries where match(content) against('#{escaped_name}%') or content like '%#{escaped_phonetic}%'")
       while entry = entry_query.fetch_hash
         blog_id = entry["blog_id"]
         blog_entry_id = entry["id"]
@@ -43,6 +45,12 @@ class CreatePosts
 
         # iteration for search method
         search_method = [name, phonetic].each do |m|
+          case m
+          when phonetic
+            ng_type = 0
+          when name
+            ng_type = 1
+          end
           # skip analyzing for names and phonetics that contain less than 3 words
           if m == name and m.split(//u).length <= 2
             next
@@ -50,80 +58,52 @@ class CreatePosts
             next
           end
 
-          # next_index = 0
-          # index = content.index(m, next_index)
-          
-          # while index
-          # start iteration for each line
-          # content.each do |line|
-            # determin where to start the shorten content
-            # content_from = (content.split(//u).length * (index.to_f / content.length)).ceil - content_rangge
-            # content_from = 0 if content_from < 0
-            # shorten_content = content.split(//u).slice(content_from, content_rangge * 2).join.gsub("'", "''")
-            # 
-            # content_from = (content.split(//u).length * (next_index.to_f / content.length)).floor
-            # content_to = (content.split(//u).length * (index.to_f / content.length)).ceil + m.split(//u).lenght * 2
+          # alphabetical keyword search accuracy adjustment
+          # ex) if keyword is "ash", except words like "flash"
+          # if m == name
+          #   # unless /[^a-zA-Z\\\/;:]+#{name}[^a-zA-Z\\\/;:]+/ =~ content.split(//u).slice(content_from, content_to).join.gsub("'", "''")
+          #   unless /[^a-zA-Z\\\/;:]+#{name}[^a-zA-Z\\\/;:]+/ =~ content
+          #     # start debug
+          #     puts "=> brand name cannot be specified\r\n"
+          #     # end debug
+          #     next
+          #   end
+          # end
+          # end alphabetical keyword search accuracy adjustment
 
-            # alphabetical keyword search accuracy adjustment
-            # ex) if keyword is "ash", except words like "flash"
-            if m == name
-              # unless /[^a-zA-Z\\\/;:]+#{name}[^a-zA-Z\\\/;:]+/ =~ content.split(//u).slice(content_from, content_to).join.gsub("'", "''")
-              unless /[^a-zA-Z\\\/;:]+#{name}[^a-zA-Z\\\/;:]+/ =~ content
-                # next_index = index + 1
-                # index = content.index("#{name}", next_index)
-                # start debug
-                puts "=> brand name cannot be specified\r\n"
-                # end debug
-                next
-              end
-            end
-            # end alphabetical keyword search accuracy adjustment
-
-            if /#{m}/ =~ content
-              # do not insert the same post
+          content.each do |line|
+            if /#{m}/ =~ line
+              # start do not insert the same post
               if object.query("select id from posts where blog_id = '#{blog_id}' and blog_entry_id = '#{blog_entry_id}' and brand_id = '#{brand_id}'").fetch_hash.nil?
-                begin
-                  object.query("insert into posts (blog_id, blog_entry_id, brand_id, product_id, posted_date, created_at, updated_at) values(#{blog_id}, #{blog_entry_id}, '#{brand_id}', 'NULL', '#{posted_date}', '#{time}', '#{time}')")
-                  # start debug
-                  puts "hit by #{m}"
-                  # puts "content.length = #{content.length}"
-                  # puts "content.split(//u).length = #{content.split(//u).length}"
-                  # puts "content_from = #{content_from}"
-                  # puts "content_to = #{content_to}"
-                  # puts "next_index = #{next_index}"
-                  puts "=> 1 row inserted into posts successfully"
-                  # end debug
-                rescue => error
-                  p error
+                ng_flg = analyze_ng_words(brand_id, ng_type, line)
+                if ng_flg.nil?
+                  begin
+                    object.query("insert into posts (blog_id, blog_entry_id, brand_id, product_id, posted_date, created_at, updated_at) values(#{blog_id}, #{blog_entry_id}, '#{brand_id}', 'NULL', '#{posted_date}', '#{time}', '#{time}')")
+                    # start debug
+                    puts "hit by #{m}"
+                    puts "=> 1 row inserted into posts successfully\r\n\r\n"
+                    # end debug
+                  rescue => error
+                    p error
+                  end
+                else
+                  puts "=> this content has NG Word(s) and not collected\r\n\r\n"
                 end
               else
                 # start debug
                 puts "blog_id = #{blog_id}"
                 puts "blog_entry_id = #{blog_entry_id}"
-                puts "=> This post has been already created"
+                puts "=> This post has been already created\r\n\r\n"
                 # end debug
               end
+              # end do not insert the same post
             end
-
-            # next_index = index + 1
-            # index = content.index("#{name}", next_index)
-            # # start debug
-            # puts "new next_index = #{next_index}"
-            # # end debug
-          # end
+          end
           # end iteration for each line
         end
         # end iteration for search method
       end
       # end iteration for blog entries
-
-      # set listed_count for brands
-      listed_count = object.query("select count(id) count from posts where brand_id = '#{brand_id}' and delete_flg is null").fetch_hash["count"]
-      object.query("update brands set listed_count = '#{listed_count}' where id = '#{brand_id}'")
-
-      # start debug
-      puts "=> listed_count = #{listed_count}"
-      # end debug
     end
     # end iteration for brands
     object.close
@@ -164,6 +144,25 @@ class CreatePosts
       p error
     end
     object.close
+  end
+
+  def self.analyze_ng_words(brand_id, ng_type, line)
+    object = Mysql::new(@@mysql_host, @@mysql_user, @@mysql_password, @@mysql_db)
+    ng_flg = nil
+    ng_words_query = object.query("select ng_word from ng_words where brand_id = #{brand_id} and ng_type = #{ng_type}")
+    unless ng_words_query == []
+      # start iteration for each ng_word
+      while ng_word = ng_words_query.fetch_hash
+        if /(#{ng_word['ng_word']})/ =~ line
+          ng_flg = $1
+          puts "#{ng_word['ng_word']} was detected as NG Word\r\n"
+          break
+        end
+      end
+      # end iteration for each ng_word
+    end
+    object.close
+    ng_flg
   end
 end
 

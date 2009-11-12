@@ -21,6 +21,25 @@
       <%= link_to "Products", {:controller => 'products', :action => 'index'} %>
     </li>
     <li><a href="#">Contact</a></li>
+    <% unless logged_in? %>
+      <% if controller.controller_name == "sessions" %>
+        <li class="current_page_item">
+      <% else %>
+        <li>
+      <% end %>
+      <%= link_to 'Log In', login_path %></li>
+
+      <% if controller.controller_name == "users" %>
+        <li class="current_page_item">
+      <% else %>
+        <li>
+      <% end %>
+      <%= link_to 'Sign Up', signup_path %></li>
+    <% end %>
+
+    <% if logged_in? %>
+      <li><%= link_to 'Logout', session_path, :method => :delete %></li>
+    <% end %>
   </ul>
 </div>
 <!-- end #menu -->
