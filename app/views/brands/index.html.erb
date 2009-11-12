@@ -12,13 +12,17 @@
     <td><%= link_to brand.name, brand_path(brand) %></td>
     <td><%= link_to brand.phonetic, brand_path(brand) %></td>
     <td><%= link_to brand.listed_count, brand_path(brand) %></td>
-    <td><%= link_to 'Show', brand %></td>
-    <td><%= link_to 'Edit', edit_brand_path(brand) %></td>
-    <td><%= link_to 'Destroy', brand, :confirm => 'Are you sure?', :method => :delete %></td>
+    <% if @session[:user_id] == 1 %>
+      <td><%= link_to 'Edit', edit_brand_path(brand) %></td>
+      <td><%= link_to 'Destroy', brand, :confirm => 'Are you sure?', :method => :delete %></td>
+    <% end %>
   </tr>
 <% end %>
 </table>
 
 <br />
 <div class="pagination"><%= will_paginate @brands %></div>
-<%= link_to 'New brand', new_brand_path %>
+
+<% if @session[:user_id] == 1 %>
+  <%= link_to 'New brand', new_brand_path %>
+<% end %>

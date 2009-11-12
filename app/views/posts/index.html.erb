@@ -1,7 +1,5 @@
-<h1>Listing posts</h1>
-<div id="banner"><img src="stylesheets/earthlingtwo/images/img07.jpg" alt="" /></div>
-<h2 class="title"><a href="#">Lorem ipsum dolor sit amet </a></h2>
-<p class="meta">Aliquam sit amet tempus sed consequat</p>
+<h1 class="title"><a href="#">Listing posts</a></h1>
+<p class="meta">New posts</p>
 <table>
   <tr>
     <th>Author</th>
@@ -13,9 +11,9 @@
   </tr>
 <% @posts.each do |post| %>
   <tr>
-    <td><%=h post.blog.author %></td>
+    <td><%= link_to post.blog.author, post.blog %></td>
     <td><%= link_to post.blog_entry.title, post %></td>
-    <td><%=h post.brand.name %><br>(<%=h post.brand.phonetic %>)</td>
+    <td><%= link_to post.brand.name, post %><br>(<%= link_to post.brand.phonetic, post %>)</td>
     <!-- <td>
       <% unless post.product.nil? %>
         <%=h post.product.name %>
@@ -23,11 +21,15 @@
     </td> -->
     <td><%= post.blog_entry.content %></td>
     <td><%=h post.posted_date %></td>
-    <td><%= link_to 'Show', post %></td>
-    <td><%= link_to 'Edit', edit_post_path(post) %></td>
-    <td><%= link_to 'Destroy', post, :confirm => 'Are you sure?', :method => :delete %></td>
+    <% if @session[:user_id] == 1 %>
+      <td><%= link_to 'NG Word', :controller => :ng_words, :action => :new, :id => post.brand.id %></td>
+      <td><%= link_to 'Destroy', post, :confirm => 'Are you sure?', :method => :delete %></td>
+    <% end %>
   </tr>
 <% end %>
 </table>
 <div class="pagination"><%= will_paginate @posts %></div>
-<div class="navigation"><%= link_to 'New post', new_post_path %></div>
+
+<% if @session[:user_id] == 1 %>
+  <%= link_to 'NG Word Index', ng_words_path %>
+<% end %>

@@ -3,7 +3,8 @@
 class CrowlBlogs
   require 'net/http'
   require 'mysql'
-  require 'dbi'
+  require 'date'
+  $KCODE = 'UTF8'
 
   @@mysql_host = 'localhost'
   @@mysql_user = 'mysql'
@@ -43,10 +44,10 @@ class CrowlBlogs
         self.insert_blog(author, phonetic, tags, uri, title, crowl_type, time)
 
         # start debug
-        p author
-        p title
-        p uri
-        p tags
+        puts author
+        puts title
+        puts uri
+        puts tags
         puts "crowl_type = #{crowl_type}"
         puts "\r\n"
         # end debug
@@ -99,10 +100,10 @@ class CrowlBlogs
     self.insert_blog(author, phonetic, tags, uri, title, crowl_type, time)
 
     # start debug
-    p author
-    p title
-    p uri
-    p tags
+    puts author
+    puts title
+    puts uri
+    puts tags
     puts "crowl_type = #{crowl_type}"
     puts "\r\n"
     # end debug

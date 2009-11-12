@@ -1,22 +1,35 @@
 class BlogsController < ApplicationController
-
+  # before_filter :login_required , :except => [:index, :show]
+  before_filter :login_as_admin , :except => [:index, :show]
   layout 'posts'
 
   @@brand_index = Brand.all(:conditions => "delete_flg is null", 
                             :order => "listed_count DESC", 
-                            :limit => 10
+                            :limit => 20
                             )
   @@blog_index = Blog.all(:conditions => "delete_flg is null", 
                           :order => "listed_count DESC", 
-                          :limit => 10
+                          :limit => 20
                           )
+
+  @@main_title = "芸能人のブログで話題の商品をさがすならセレブログ"
+  @@main_keyword = ["芸能人", "ブログ"]
+  @@main_description = @@main_title + "です。"
 
   # GET /blogs
   # GET /blogs.xml
   def index
-    @blogs = Blog.paginate(:page => params[:page])
+    @session = session
+    @blogs = Blog.paginate(:page => params[:page], 
+                           :conditions => "listed_count > 0 and delete_flg is null"#, 
+                           # :order => "listed_count DESC"
+                          )
     @brand_index = @@brand_index
     @blog_index = @@blog_index
+
+    @title = "芸能人がブログで紹介している商品がわかる | " + @@main_title
+    @meta_keywords = @@main_keyword[0] + "," + @@main_keyword[1]
+    @meta_description = @@main_keyword[0] + " " + @@main_keyword[1]+ "。" + @@main_description
 
     respond_to do |format|
       format.html # index.html.erb
@@ -27,14 +40,19 @@ class BlogsController < ApplicationController
   # GET /blogs/1
   # GET /blogs/1.xml
   def show
+    @session = session
     @blog = Blog.find(params[:id])
     @brand_index = @@brand_index
     @blog_index = @@blog_index
     @posts = Post.paginate(:page => params[:page], 
-                           :conditions => ["blog_id = ?", params[:id]]
+                           :conditions => ["blog_id = ? and delete_flg is null", params[:id]]
                            )
     # keyword highlight
-    @posts = content_thumbnail_highlight(@posts)
+    @posts = content_tweet_highlight(@posts)
+
+    @title = "#{@blog.author}さんのブログで紹介されている商品 | " + @@main_title
+    @meta_keywords = @blog.author + "," + @@main_keyword[0] + "," + @@main_keyword[1]
+    @meta_description = "#{@blog.author} #{@@main_keyword[1]}。 #{@blog.author}さんのブログで紹介されている商品です。"
 
     respond_to do |format|
       format.html # show.html.erb

@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091031135840) do
+ActiveRecord::Schema.define(:version => 20091110115356) do
 
   create_table "blog_entries", :force => true do |t|
     t.integer  "blog_id"
@@ -46,6 +46,14 @@ ActiveRecord::Schema.define(:version => 20091031135840) do
     t.datetime "updated_at"
   end
 
+  create_table "ng_words", :force => true do |t|
+    t.integer  "brand_id"
+    t.string   "ng_word"
+    t.integer  "ng_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "posts", :force => true do |t|
     t.integer  "blog_id"
     t.integer  "blog_entry_id"
@@ -63,6 +71,21 @@ ActiveRecord::Schema.define(:version => 20091031135840) do
     t.string   "image_uri"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "users", :force => true do |t|
+    t.string   "login"
+    t.string   "email"
+    t.string   "crypted_password",          :limit => 40
+    t.string   "salt",                      :limit => 40
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "remember_token"
+    t.datetime "remember_token_expires_at"
+    t.string   "activation_code",           :limit => 40
+    t.datetime "activated_at"
+    t.string   "state",                                   :default => "passive"
+    t.datetime "deleted_at"
   end
 
 end

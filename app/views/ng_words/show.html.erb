@@ -1,0 +1,14 @@
+<p>
+  <b>Brand:</b>
+  <%=h @ng_word.brand.name %>
+</p>
+
+<p>
+  <b>Ng word:</b>
+  <%=h @ng_word.ng_word %>
+</p>
+
+
+<%= link_to 'Edit', edit_ng_word_path(@ng_word) %> |
+<%= link_to 'Index', ng_words_path %> |
+<a href="javascript:history.go(-2);">Back to Post</a>

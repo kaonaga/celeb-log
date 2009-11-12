@@ -1,24 +1,24 @@
 <p>
   <b>Name:</b>
-  <%=h @brand.name %>
+  <%= link_to @brand.name, @brand %>
 </p>
 
 <p>
   <b>Phonetic:</b>
-  <%=h @brand.phonetic %>
+  <%= link_to @brand.phonetic, @brand %>
 </p>
 
 <p>
   <b>Listed count:</b>
-  <%=h @brand.listed_count %>
+  <%= link_to @brand.listed_count, @brand %>
 </p>
 
 <table>
 <% @posts.each do |post| %>
   <tr>
-    <td><%=h post.blog.author %></td>
+    <td><%= link_to post.blog.author, post.blog %></td>
     <td><%= link_to post.blog_entry.title, post %></td>
-    <td><%=h post.brand.name %><br>(<%=h post.brand.phonetic %>)</td>
+    <td><%= link_to post.brand.name, post %><br>(<%= link_to post.brand.phonetic, post %>)</td>
     <!-- <td>
       <% unless post.product.nil? %>
         <%=h post.product.name %>
@@ -26,14 +26,19 @@
     </td> -->
     <td><%= post.blog_entry.content %></td>
     <td><%=h post.posted_date %></td>
-    <td><%= link_to 'Show', post %></td>
-    <td><%= link_to 'Edit', edit_post_path(post) %></td>
-    <td><%= link_to 'Destroy', post, :confirm => 'Are you sure?', :method => :delete %></td>
+    <% if @session[:user_id] == 1 %>
+      <td><%= link_to 'NG Word', :controller => :ng_words, :action => :new, :id => post.brand.id %></td>
+      <td><%= link_to 'Destroy', post, :confirm => 'Are you sure?', :method => :delete %></td>
+    <% end %>
   </tr>
 <% end %>
 </table>
 
 <div class="pagination"><%= will_paginate @posts %></div>
-<%= link_to 'Edit', edit_brand_path(@brand) %> |
-<%= link_to 'Destroy', @brand, :confirm => 'Are you sure?', :method => :delete %> |
+
+<% if @session[:user_id] == 1 %>
+  <%= link_to 'Edit', edit_brand_path(@brand) %> |
+  <%= link_to 'Destroy', @brand, :confirm => 'Are you sure?', :method => :delete %> |
+  <%= link_to 'NG Word Index', ng_words_path %> |
+<% end %>
 <%= link_to 'Back', :back %>

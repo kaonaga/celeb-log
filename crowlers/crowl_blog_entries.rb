@@ -5,8 +5,9 @@ class CrowlBlogEntries
   require 'net/http'
   require 'cgi'
   require 'mysql'
-  require 'dbi'
+  require 'date'
   require 'nkf'
+  $KCODE = 'UTF8'
 
   @@mysql_host = 'localhost'
   @@mysql_user = 'mysql'
@@ -119,11 +120,11 @@ class CrowlBlogEntries
 
             # start debug
             puts "\r\n\r\n"
-            p blog_id
-            p date
-            p title
-            p content
-            p uri
+            puts blog_id
+            puts date
+            puts title
+            puts content
+            puts uri
             # end debug
 
             insert_blog_entry(blog_id, title, content, uri, date)
@@ -193,11 +194,11 @@ class CrowlBlogEntries
 
             # start debug
             puts "\r\n\r\n"
-            p blog_id
-            p date
-            p title
-            p content
-            p uri
+            puts blog_id
+            puts date
+            puts title
+            puts content
+            puts uri
             # end debug
 
             insert_blog_entry(blog_id, title, content, uri, date)
@@ -256,7 +257,7 @@ class CrowlBlogEntries
 
         # start debug
         puts "latest post title = #{latest_title}"
-        p latest_index
+        puts latest_index
         puts "\r\n"
         # end debug
       rescue => error
@@ -290,11 +291,11 @@ class CrowlBlogEntries
             content = NKF.nkf('-w', match[0][2]).gsub(/<.+?>/m, "").gsub("'", "''")
 
             # start debug
-            p blog_id
-            p date
-            p title
-            p content
-            p uri
+            puts blog_id
+            puts date
+            puts title
+            puts content
+            puts uri
             # end debug
 
             insert_blog_entry(blog_id, title, content, uri, date)
@@ -307,11 +308,11 @@ class CrowlBlogEntries
               title = NKF.nkf('-w', match[0][1]).gsub("'", "''")
 
               # start debug
-              p blog_id
-              p date
-              p title
+              puts blog_id
+              puts date
+              puts title
               puts "content is nil"
-              p uri
+              puts uri
               # end debug
 
               insert_blog_entry(blog_id, title, 'NULL', uri, date)
