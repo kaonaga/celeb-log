@@ -1,4 +1,6 @@
 #!/opt/local/bin/ruby
+# for centos
+# /usr/local/bin/ruby
 
 class DestroyNgPosts
   require 'net/http'
@@ -19,7 +21,11 @@ class DestroyNgPosts
   # @@logger = Logger.new("/var/www/html/celeb-log/log/crowl.log", 'daily')
 
   def self.destroy_ng_posts
-    object = Mysql::new(@@mysql_host, @@mysql_user, @@mysql_password, @@mysql_db)
+    # object = Mysql::new(@@mysql_host, @@mysql_user, @@mysql_password, @@mysql_db)
+    object = Mysql.init()
+    object.options(Mysql::SET_CHARSET_NAME, "utf8")
+    object.real_connect(@@mysql_host, @@mysql_user, @@mysql_password, @@mysql_db)
+
     post_query = object.query("select posts.id, blog_entry_id, brand_id, name, phonetic, content, brands.delete_flg from posts 
         inner join brands on posts.brand_id = brands.id 
         inner join blog_entries on posts.blog_entry_id = blog_entries.id 
@@ -118,7 +124,11 @@ class DestroyNgPosts
   end
 
   def self.analyze_ng_words(brand_id, ng_type, line)
-    object = Mysql::new(@@mysql_host, @@mysql_user, @@mysql_password, @@mysql_db)
+    # object = Mysql::new(@@mysql_host, @@mysql_user, @@mysql_password, @@mysql_db)
+    object = Mysql.init()
+    object.options(Mysql::SET_CHARSET_NAME, "utf8")
+    object.real_connect(@@mysql_host, @@mysql_user, @@mysql_password, @@mysql_db)
+
     ng_flg = nil
     ng_words_query = object.query("select ng_word from ng_words where brand_id = #{brand_id} and ng_type = #{ng_type}")
     unless ng_words_query == []

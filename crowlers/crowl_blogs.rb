@@ -1,4 +1,6 @@
 #!/opt/local/bin/ruby
+# for centos
+# /usr/local/bin/ruby
 
 class CrowlBlogs
   require 'net/http'
@@ -139,8 +141,11 @@ class CrowlBlogs
   end
 
   def self.insert_blog(author, phonetic, tags, uri, title, crowl_type, time)
+    # object = Mysql::new(@@mysql_host, @@mysql_user, @@mysql_password, @@mysql_db)
+    object = Mysql.init()
+    object.options(Mysql::SET_CHARSET_NAME, "utf8")
+    object.real_connect(@@mysql_host, @@mysql_user, @@mysql_password, @@mysql_db)
 
-    object = Mysql::new(@@mysql_host, @@mysql_user, @@mysql_password, @@mysql_db)
     blog_id = object.query("select id from blogs where uri = '#{uri}'").fetch_hash
     if blog_id.nil?
       object.query("insert into blogs (author, phonetic, title, uri, tags, crowl_type, last_update, created_at, updated_at) values('#{author}', '#{phonetic}', '#{title}', '#{uri}', '#{tags}', '#{crowl_type}', 'NULL', '#{time}', '#{time}')")

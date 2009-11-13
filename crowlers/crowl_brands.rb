@@ -1,4 +1,6 @@
 #!/opt/local/bin/ruby
+# for centos
+# /usr/local/bin/ruby
 
 # Watch out for 4℃(ヨンドシー)!
 # Fresh Carma, not Fresh
@@ -68,7 +70,11 @@ class CrowlBrands
   end
 
   def self.insert_brand(name, phonetic, time, category = 0)
-    object = Mysql::new(@@mysql_host, @@mysql_user, @@mysql_password, @@mysql_db)
+    # object = Mysql::new(@@mysql_host, @@mysql_user, @@mysql_password, @@mysql_db)
+    object = Mysql.init()
+    object.options(Mysql::SET_CHARSET_NAME, "utf8")
+    object.real_connect(@@mysql_host, @@mysql_user, @@mysql_password, @@mysql_db)
+
     if object.query("select id from brands where name = '#{name}' and phonetic = '#{phonetic.gsub("　", "")}'").fetch_hash.nil?
       object.query("insert into brands (name, phonetic, category, created_at, updated_at) values ('#{name}', '#{phonetic}', #{category}, '#{time}', '#{time}')")
       # start debug

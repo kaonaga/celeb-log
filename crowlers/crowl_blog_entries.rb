@@ -1,4 +1,6 @@
 #!/opt/local/bin/ruby
+# for centos
+# /usr/local/bin/ruby
 
 class CrowlBlogEntries
   require 'uri'
@@ -401,7 +403,11 @@ class CrowlBlogEntries
   end
 
   def self.insert_blog_entry(blog_id, title, content, uri, date)
-    object = Mysql::new(@@mysql_host, @@mysql_user, @@mysql_password, @@mysql_db)
+    # object = Mysql::new(@@mysql_host, @@mysql_user, @@mysql_password, @@mysql_db)
+    object = Mysql.init()
+    object.options(Mysql::SET_CHARSET_NAME, "utf8")
+    object.real_connect(@@mysql_host, @@mysql_user, @@mysql_password, @@mysql_db)
+
     if object.query("select id from blog_entries where blog_id = #{blog_id} and uri = '#{uri}'").fetch_hash.nil?
       object.query("insert into blog_entries (blog_id, title, content, uri, created_at, updated_at) values('#{blog_id}', '#{title}', '#{content}', '#{uri}', '#{date}', '#{date}')")
 

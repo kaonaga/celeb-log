@@ -1,4 +1,6 @@
 #!/opt/local/bin/ruby
+# for centos
+# /usr/local/bin/ruby
 
 class CreatePosts
   require 'net/http'
@@ -31,7 +33,11 @@ class CreatePosts
     # how many words to get around the keyword
     # content_rangge = 100 #words
 
-    object = Mysql::new(@@mysql_host, @@mysql_user, @@mysql_password, @@mysql_db)
+    # object = Mysql::new(@@mysql_host, @@mysql_user, @@mysql_password, @@mysql_db)
+    object = Mysql.init()
+    object.options(Mysql::SET_CHARSET_NAME, "utf8")
+    object.real_connect(@@mysql_host, @@mysql_user, @@mysql_password, @@mysql_db)
+
     brand_query = object.query("select id, name, phonetic from brands where delete_flg is null")
 
     # iteration for brands
@@ -169,7 +175,11 @@ class CreatePosts
   end
 
   def self.analyze_ng_words(brand_id, ng_type, line)
-    object = Mysql::new(@@mysql_host, @@mysql_user, @@mysql_password, @@mysql_db)
+    # object = Mysql::new(@@mysql_host, @@mysql_user, @@mysql_password, @@mysql_db)
+    object = Mysql.init()
+    object.options(Mysql::SET_CHARSET_NAME, "utf8")
+    object.real_connect(@@mysql_host, @@mysql_user, @@mysql_password, @@mysql_db)
+
     ng_flg = nil
     ng_words_query = object.query("select ng_word from ng_words where brand_id = #{brand_id} and ng_type = #{ng_type}")
     unless ng_words_query == []
