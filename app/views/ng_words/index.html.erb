@@ -4,6 +4,8 @@
   <tr>
     <th>Brand</th>
     <th>Phonetic</th>
+    <th>Author</th>
+    <th>Title</th>
     <th>Ng Word</th>
   </tr>
 
@@ -11,6 +13,8 @@
   <tr>
     <td><%=h ng_word.brand.name %></td>
     <td><%=h ng_word.brand.phonetic %></td>
+    <td><% unless ng_word.blog.nil? %><%=h ng_word.blog.author %><% end %></td>
+    <td><% unless ng_word.blog.nil? %><%=h ng_word.blog.title %><% end %></td>
     <td><%=h ng_word.ng_word %></td>
     <td><%= link_to 'Show', ng_word %></td>
     <td><%= link_to 'Edit', edit_ng_word_path(ng_word) %></td>

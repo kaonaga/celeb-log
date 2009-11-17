@@ -2,20 +2,11 @@ class NgWordsController < ApplicationController
   before_filter :login_as_admin
   layout 'posts'
 
-  @@brand_index = Brand.all(:conditions => "delete_flg is null", 
-                            :order => "listed_count DESC", 
-                            :limit => 20
-                            )
-  @@blog_index = Blog.all(:conditions => "delete_flg is null", 
-                          :order => "listed_count DESC", 
-                          :limit => 20
-                          )
-
   # GET /ng_words
   # GET /ng_words.xml
   def index
     @ng_words = NgWord.paginate(:page => params[:page], 
-                                :joins => "INNER JOIN brands on ng_words.brand_id = brands.id", 
+                                :joins => "INNER JOIN brands on ng_words.brand_id = brands.id LEFT OUTER JOIN blogs on ng_words.blog_id = blogs.id", 
                                 :order => "brands.name"
                                )
 
@@ -48,6 +39,7 @@ class NgWordsController < ApplicationController
     @brand = Brand.find(params[:id])
     @ng_word = NgWord.new
     @ng_word[:brand_id] = @brand.id
+    @blog = Blog.find(params[:blog_id])
 
     @brand_index = @@brand_index
     @blog_index = @@blog_index
@@ -62,6 +54,8 @@ class NgWordsController < ApplicationController
   def edit
     @ng_word = NgWord.find(params[:id])
     @brand = Brand.find(@ng_word.brand_id)
+    @blog= Blog.find(@ng_word.blog_id)
+
     @brand_index = @@brand_index
     @blog_index = @@blog_index
   end
@@ -76,7 +70,11 @@ class NgWordsController < ApplicationController
     when "name"
       @ng_word.ng_type = 1
     end
-  
+
+    unless params[:limited].nil?
+      @ng_word.blog_id = params[:limited]
+    end
+
     respond_to do |format|
       if @ng_word.save
         flash[:notice] = 'NgWord was successfully created.'

@@ -1,17 +1,17 @@
-<h1>Listing brands</h1>
+<h1>
+  芸能人が紹介しているブランド一覧
+</h1>
 
-<table>
+<table class="brand_table">
   <tr>
-    <th>Name</th>
-    <th>Phonetic</th>
-    <th>Listed count</th>
+    <th>ブランド名</th>
+    <th>掲載数</th>
   </tr>
 
 <% @brands.each do |brand| %>
   <tr>
-    <td><%= link_to brand.name, brand_path(brand) %></td>
-    <td><%= link_to brand.phonetic, brand_path(brand) %></td>
-    <td><%= link_to brand.listed_count, brand_path(brand) %></td>
+    <td><%= link_to "#{brand.name} (#{brand.phonetic})", brand %></td>
+    <td><%= link_to brand.listed_count, brand %></td>
     <% if @session[:user_id] == 1 %>
       <td><%= link_to 'Edit', edit_brand_path(brand) %></td>
       <td><%= link_to 'Destroy', brand, :confirm => 'Are you sure?', :method => :delete %></td>

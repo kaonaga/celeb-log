@@ -1,39 +1,22 @@
 <h1>
-  <%= @post.blog.author %>さんがブログで紹介している<br><%= @post.brand.name %>（<%= @post.brand.phonetic %>）の商品
+  <%= link_to @post.blog.author, @post.blog %>さんがブログで紹介している<br><%= link_to "#{@post.brand.name} (#{@post.brand.phonetic})", @post.brand %>の商品
 </h1>
 
-<p>
-  <b>Author:</b>
-  <%= link_to @post.blog.author, @post.blog %>
-</p>
+<div class="post">
+  <span class="thumbnail"><%= link_to image_tag("http://capture.heartrails.com/300x225/shadow?#{@post.blog.uri}", 
+      :title => "#{@post.blog.author} オフィシャルブログ #{@post.blog.title}", 
+      :alt => "#{@post.blog.author} オフィシャルブログ #{@post.blog.title}のスクリーンショット"), @post.blog_entry.uri, :target => :blank %></span>
+  <div class="post_description">
+    <span class="title"><%= @post.blog_entry.title %></span><br>
+    <span class="content"><%= @post.blog_entry.content %></span><br>
+    <span class="date"><%= @post.posted_date %></span><br><br>
+    <span class="link"><%= link_to "#{@post.blog.author}さんのブログで続きを読む", @post.blog_entry.uri, :target => :blank %></span>
+  </div>
+  <!-- end post_description -->
+</div>
+<!-- end post -->
 
-<p>
-  <b>Entry Title:</b>
-  <%= link_to @post.blog_entry.title, @post.blog_entry.uri, :target => :blank %>
-</p>
-
-<p>
-  <b>Brand:</b>
-  <%= link_to @post.brand.name, @post.brand %>(<%= link_to @post.brand.phonetic, @post.brand %>)
-</p>
-
-<!-- <p>
-  <b>Product:</b>
-  <%=h @post.product %>
-</p> -->
-
-<p>
-  <b>Content:</b>
-  <%= @post.blog_entry.content %><br>
-  <%= link_to "#{@post.blog.author}さんのブログで続きを読む", @post.blog_entry.uri, :target => :blank %>
-</p>
-
-<p>
-  <b>Posted Date:</b>
-  <%= @post.posted_date %>
-</p>
-
-<!-- Recommendations -->
+<!-- recommendations -->
 <div class="recommendations">
   <div class="rec_text">
     <a href="http://www.amazon.co.jp/gp/search?ie=UTF8&keywords=<%= @post.brand.name %>&tag=snusmumrik0b-22&index=apparel&linkCode=ur2&camp=247&creative=1211" target="blank"><b><%= @post.blog.author %>さんもブログで紹介している<%= @post.brand.name %>（<%= @post.brand.phonetic %>）の商品をチェック</b></a><img src="http://www.assoc-amazon.jp/e/ir?t=snusmumrik0b-22&l=ur2&o=9" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
@@ -43,29 +26,34 @@
     <% unless @amazon_recommendations.nil? %>
       <% @amazon_recommendations.each do |r| %>
         <% unless r.small_image.nil? %>
-          <li><%= link_to (image_tag r.small_image.url), "#{r.detail_page_url}", :alt => "#{r.item_attributes.title}", :title => "#{r.item_attributes.title}", :target => :blank %></li>
+          <li><%= link_to (image_tag r.medium_image.url, :height => 130), "#{r.detail_page_url}", :alt => "#{r.item_attributes.title}", :title => "#{r.item_attributes.title}", :target => :blank %></li>
         <% end %>
       <% end %>
     <% end %>
 
     <% unless @rakuten_recommendations.nil? %>
       <% @rakuten_recommendations.each do |r| %>
-        <li><%= link_to (image_tag r.image_url, :height => 75), "#{r.item_url}", :alt => "#{r.item_name}", :title => "#{r.item_name}", :target => :blank %><br></li>
+        <li><%= link_to (image_tag r.image_url), "#{r.item_url}", :alt => "#{r.item_name}", :title => "#{r.item_name}", :target => :blank %><br></li>
       <% end %>
     <% end %>
   </ul>
+  <br>
+  <!-- <div class="rec_text_bottom">
+    <a href="http://www.amazon.co.jp/gp/search?ie=UTF8&keywords=<%= @post.brand.name %>&tag=snusmumrik0b-22&index=apparel&linkCode=ur2&camp=247&creative=1211" target="blank">Amazonで<%= @post.brand.name %>の商品を検索</a><img src="http://www.assoc-amazon.jp/e/ir?t=snusmumrik0b-22&l=ur2&o=9" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+  </div> -->
 </div>
 <!-- end Recommendations -->
 
-<div class="rec_text">
-  <a href="http://www.amazon.co.jp/gp/search?ie=UTF8&keywords=<%= @post.brand.name %>&tag=snusmumrik0b-22&index=apparel&linkCode=ur2&camp=247&creative=1211" target="blank">Amazonで<%= @post.brand.name %>の商品を検索</a><img src="http://www.assoc-amazon.jp/e/ir?t=snusmumrik0b-22&l=ur2&o=9" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+<div class="internal_link">
+  <%= link_to "#{@post.blog.author}さんが紹介している全商品を見る", @post.blog %><br>
+  <%= link_to "#{@post.brand.name}が他に紹介されている記事を見る", @post.brand %>
 </div>
+<!-- end internal_link -->
 
 <div class="navi">
   <% if @session[:user_id] == 1 %>
-    <%= link_to 'NG Word', :controller => :ng_words, :action => :new, :id => @post.brand.id %> |
+    <%= link_to 'NG Word', :controller => :ng_words, :action => :new, :id => @post.brand.id, :blog_id => @post.blog_id %> |
     <%= link_to 'Destroy', @post, :confirm => 'Are you sure?', :method => :delete %> |
     <%= link_to 'NG Word Index', ng_words_path %> |
   <% end %>
-  <%= link_to 'Back', posts_path %>
 </div>

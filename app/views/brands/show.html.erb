@@ -1,33 +1,27 @@
-<p>
-  <b>Name:</b>
-  <%= link_to @brand.name, @brand %>
-</p>
+<h1 class="normal">
+  <span class="brand"><%= link_to "#{@brand.name} (#{@brand.phonetic})", @brand %></span>が紹介されているブログが
+  <span class="listed_count"><%= link_to @brand.listed_count, @brand %></span>件ヒットしました。
+</h1>
 
-<p>
-  <b>Phonetic:</b>
-  <%= link_to @brand.phonetic, @brand %>
-</p>
-
-<p>
-  <b>Listed count:</b>
-  <%= link_to @brand.listed_count, @brand %>
-</p>
-
-<table>
+<table class="blog_table">
+  <tr>
+    <th></th>
+    <th class="blog_table_th">ブロガー</th>
+    <th class="blog_table_th">タイトル</th>
+    <th>本文</th>
+    <th class="blog_table_th">掲載日</th>
+  </tr>
 <% @posts.each do |post| %>
   <tr>
+    <td class="thumbnail"><%= link_to image_tag("http://capture.heartrails.com/tiny/shadow?#{post.blog.uri}", 
+        :title => "#{post.blog.author} オフィシャルブログ #{post.blog.title}", 
+        :alt => "#{post.blog.author} オフィシャルブログ #{post.blog.title}のスクリーンショット"), post %></td>
     <td><%= link_to post.blog.author, post.blog %></td>
     <td><%= link_to post.blog_entry.title, post %></td>
-    <td><%= link_to post.brand.name, post %><br>(<%= link_to post.brand.phonetic, post %>)</td>
-    <!-- <td>
-      <% unless post.product.nil? %>
-        <%=h post.product.name %>
-      <% end %>
-    </td> -->
     <td><%= post.blog_entry.content %></td>
     <td><%=h post.posted_date %></td>
     <% if @session[:user_id] == 1 %>
-      <td><%= link_to 'NG Word', :controller => :ng_words, :action => :new, :id => post.brand.id %></td>
+      <td><%= link_to 'NG Word', :controller => :ng_words, :action => :new, :id => post.brand.id, :blog_id => post.blog_id %></td>
       <td><%= link_to 'Destroy', post, :confirm => 'Are you sure?', :method => :delete %></td>
     <% end %>
   </tr>
@@ -41,4 +35,3 @@
   <%= link_to 'Destroy', @brand, :confirm => 'Are you sure?', :method => :delete %> |
   <%= link_to 'NG Word Index', ng_words_path %> |
 <% end %>
-<%= link_to 'Back', :back %>

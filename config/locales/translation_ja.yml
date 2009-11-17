@@ -1,0 +1,69 @@
+ja: 
+  activerecord: 
+    models: 
+      blog: "ブログ"  #g
+      blog_entry: "ブログのエントリ"  #g
+      brand: "ブランド"  #g
+      ng_word: "ン語"  #g
+      post: "ポスト"  #g
+      product: "製品"  #g
+      user: "ユーザー"  #g
+
+    attributes: 
+      blog: 
+        author: "著者"  #g
+        phonetic: "ふりがな"  #g
+        title: "タイトル"  #g
+        tags: "タグ"  #g
+        crowl_type: "Crowlタイプ"  #g
+        delete_flg: "削除flg"  #g
+        last_update: "最終更新日"  #g
+        posts: "投稿"  #g
+        blog_entries: "ブログのエントリ"  #g
+        ng_words: "単語ン"  #g
+
+      blog_entry: 
+        title: "タイトル"  #g
+        content: "内容"  #g
+        posts: "投稿"  #g
+        blog: "ブログ"  #g
+
+      brand: 
+        name: "名前"  #g
+        phonetic: "ふりがな"  #g
+        category: "カテゴリー"  #g
+        delete_flg: "削除flg"  #g
+        posts: "投稿"  #g
+        ng_words: "単語ン"  #g
+
+      ng_word: 
+        ng_word: "ン語"  #g
+        ng_type: "ンのタイプ"  #g
+        brand: "ブランド"  #g
+        blog: "ブログ"  #g
+
+      post: 
+        delete_flg: "削除flg"  #g
+        posted_date: "投稿日"  #g
+        brand: "ブランド"  #g
+        blog: "ブログ"  #g
+        product: "製品"  #g
+        blog_entry: "ブログのエントリ"  #g
+
+      product: 
+        name: "名前"  #g
+        image_uri: "画像ウリ"  #g
+        posts: "投稿"  #g
+
+      user: 
+        login: "ログイン"  #g
+        email: "Eメール"  #g
+        crypted_password: "暗号化されたパスワード"  #g
+        salt: "塩"  #g
+        remember_token: "覚えてトークン"  #g
+        remember_token_expires_at: "トークンの記憶で期限が切れる"  #g
+        activation_code: "アクティベーションコード"  #g
+        activated_at: "で活性化"  #g
+        state: "状態"  #g
+        deleted_at: "で削除"  #g
+

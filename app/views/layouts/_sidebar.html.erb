@@ -2,25 +2,40 @@
   <% unless controller.controller_name == 'sessions' or controller.controller_name == 'users' %>
     <ul>
       <li>
-        <h2>Blogs</h2>
+        <sapn class="title">ブログ</sapn>
         <ul>
           <% @blog_index.each do |blog| %>
-            <li><%= link_to blog.author, blog_path(blog.id) %>(<%=h blog.listed_count %>)</li>
+            <li><%= link_to "#{blog.author} (#{blog.listed_count})", blog_path(blog.id) %></li>
           <% end %>
           <li><%= link_to "ブログをすべて見る", blogs_path %></li>
         </ul>
       </li>
       <li>
-        <h2>Brands</h2>
+        <span class="title">ブランド</span>
         <ul>
           <% @brand_index.each do |brand| %>
-            <li><%= link_to brand.name, brand_path(brand.id) %>(<%=h brand.listed_count %>)</li>
+            <li><%= link_to "#{brand.name} (#{brand.listed_count})", brand_path(brand.id) %></li>
           <% end %>
           <li><%= link_to "ブランドをすべて見る", brands_path %></li>
         </ul>
       </li>
     </ul>
   <% end %>
+  <!-- google adsense -->
+  <div id="ad_code">
+    <script type="text/javascript"><!--
+    google_ad_client = "pub-9916693973832627";
+    /* celeb-log.info, 200x200, created 15/11/09 */
+    google_ad_slot = "2051446514";
+    google_ad_width = 200;
+    google_ad_height = 200;
+    //-->
+    </script>
+    <script type="text/javascript"
+    src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+    </script>
+  </div>
+  <!-- end #google adsense -->
 </div>
 <!-- end #sidebar -->
 <div style="clear: both;">&nbsp;</div>

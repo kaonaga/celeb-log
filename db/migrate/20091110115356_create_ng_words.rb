@@ -2,6 +2,7 @@ class CreateNgWords < ActiveRecord::Migration
   def self.up
     create_table :ng_words do |t|
       t.references :brand
+      t.references :blog
       t.string :ng_word
       t.integer :ng_type
 

@@ -162,9 +162,9 @@ class CrowlBlogEntries
           sleep 0.5
 
           # local test setting
-          # if i >= 2
-          #   next_page_flg = nil
-          # end
+          if i >= 2
+            next_page_flg = nil
+          end
           # end local test setting
 
         rescue => error
@@ -403,41 +403,49 @@ class CrowlBlogEntries
   end
 
   def self.insert_blog_entry(blog_id, title, content, uri, date)
-    # object = Mysql::new(@@mysql_host, @@mysql_user, @@mysql_password, @@mysql_db)
-    object = Mysql.init()
-    object.options(Mysql::SET_CHARSET_NAME, "utf8")
-    object.real_connect(@@mysql_host, @@mysql_user, @@mysql_password, @@mysql_db)
+    begin
+      # object = Mysql::new(@@mysql_host, @@mysql_user, @@mysql_password, @@mysql_db)
+      object = Mysql.init()
+      object.options(Mysql::SET_CHARSET_NAME, "utf8")
+      object.real_connect(@@mysql_host, @@mysql_user, @@mysql_password, @@mysql_db)
 
-    if object.query("select id from blog_entries where blog_id = #{blog_id} and uri = '#{uri}'").fetch_hash.nil?
-      object.query("insert into blog_entries (blog_id, title, content, uri, created_at, updated_at) values('#{blog_id}', '#{title}', '#{content}', '#{uri}', '#{date}', '#{date}')")
-
-      # start debug
-      @@logger.debug("=> 1 row inserted nto blog_entries successfully")
-      puts "=> 1 row inserted nto blog_entries successfully"
-      # end debug
-
-      last_update = object.query("select last_update from blogs where id = #{blog_id}").fetch_hash['last_update']
-      if Time.local(date) > Time.local(last_update)
-        object.query("update blogs set last_update = '#{date}' where id = '#{blog_id}'");
+      if object.query("select id from blog_entries where blog_id = #{blog_id} and uri = '#{uri}'").fetch_hash.nil?
+        object.query("insert into blog_entries (blog_id, title, content, uri, created_at, updated_at) values('#{blog_id}', '#{title}', '#{content}', '#{uri}', '#{date}', '#{date}')")
 
         # start debug
-        @@logger.debug("last_update = #{last_update}")
-        @@logger.debug("this article's published date = #{date}")
-        @@logger.debug("=> update blogs set last_update = '#{date}' where id = '#{blog_id}'")
-        puts "last_update = #{last_update}"
-        puts "this article's published date = #{date}"
-        puts "=> update blogs set last_update = '#{date}' where id = '#{blog_id}'"
+        @@logger.debug("=> 1 row inserted nto blog_entries successfully")
+        puts "=> 1 row inserted nto blog_entries successfully"
         # end debug
-      end
-      object.close
-      true
-    else
-      # start debug
-      @@logger.debug("=> this article has been already crowled")
-      # end debug
 
-      object.close
-      nil
+        last_update = object.query("select last_update from blogs where id = #{blog_id}").fetch_hash['last_update']
+        if Time.local(date) > Time.local(last_update)
+          object.query("update blogs set last_update = '#{date}' where id = '#{blog_id}'");
+
+          # start debug
+          @@logger.debug("last_update = #{last_update}")
+          @@logger.debug("this article's published date = #{date}")
+          @@logger.debug("=> update blogs set last_update = '#{date}' where id = '#{blog_id}'")
+          puts "last_update = #{last_update}"
+          puts "this article's published date = #{date}"
+          puts "=> update blogs set last_update = '#{date}' where id = '#{blog_id}'"
+          # end debug
+        end
+        object.close
+        true
+      else
+        # start debug
+        @@logger.debug("=> this article has been already crowled")
+        # end debug
+
+        object.close
+        nil
+      end
+    rescue => error
+      p error
+      next_page_flg = nil
+    rescue Timeout::Error => error
+      p error
+      retry
     end
   end
 

@@ -6,8 +6,6 @@ one:
   blog_entry_id: 1
   brand_id: 1
   product_id: 1
-  content: MyString
-  keyword_index: 100
 
 two:
   id: 2
@@ -15,8 +13,6 @@ two:
   blog_entry_id: 2
   brand_id: 2
   product_id: 2
-  content: MyString
-  keyword_index: 200
 
 three:
   id: 3
@@ -24,5 +20,3 @@ three:
   blog_entry_id: 3
   brand_id: 2
   product_id: 2
-  content: MyString
-  keyword_index: 300

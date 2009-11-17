@@ -1,33 +1,27 @@
-<h1 class="title"><a href="#">Listing posts</a></h1>
-<p class="meta">New posts</p>
-<table>
-  <tr>
-    <th>Author</th>
-    <th>Entry Title</th>
-    <th>Brand</th>
-    <!-- <th>Product</th> -->
-    <th>Content</th>
-    <th>Posted date</th>
-  </tr>
+<h1>芸能人がブログで紹介する新着商品</h1>
+
+<ul>
 <% @posts.each do |post| %>
-  <tr>
-    <td><%= link_to post.blog.author, post.blog %></td>
-    <td><%= link_to post.blog_entry.title, post %></td>
-    <td><%= link_to post.brand.name, post %><br>(<%= link_to post.brand.phonetic, post %>)</td>
-    <!-- <td>
-      <% unless post.product.nil? %>
-        <%=h post.product.name %>
-      <% end %>
-    </td> -->
-    <td><%= post.blog_entry.content %></td>
-    <td><%=h post.posted_date %></td>
+  <li class="posts">
+    <span class="thumbnail"><%= link_to image_tag("http://capture.heartrails.com/medium/shadow?#{post.blog.uri}"), post %></span>
+    <div class="posts_description">
+      <h2 class="normal"><span class="author"><strong><%= link_to post.blog.author, post.blog %></strong></span>さんが紹介している<span class="brand"><strong><%= link_to "#{post.brand.name} (#{post.brand.phonetic})", post %></strong></span></h2>
+      <span class="title"><%= link_to post.blog_entry.title, post %></span><br>
+      <span class="content"><%= post.blog_entry.content %></span><br>
+      <span class="date"><%=h post.posted_date %></span><br>
+    </div>
+    <!-- end posts_description -->
     <% if @session[:user_id] == 1 %>
-      <td><%= link_to 'NG Word', :controller => :ng_words, :action => :new, :id => post.brand.id %></td>
-      <td><%= link_to 'Destroy', post, :confirm => 'Are you sure?', :method => :delete %></td>
+      <div class="admin_navi">
+        <%= link_to 'NG Word', :controller => :ng_words, :action => :new, :id => post.brand.id, :blog_id => post.blog_id %>
+        <%= link_to 'Destroy', post, :confirm => 'Are you sure?', :method => :delete %>
+      </div>
     <% end %>
-  </tr>
+  </li>
+  <!-- end post -->
 <% end %>
-</table>
+</ul>
+
 <div class="pagination"><%= will_paginate @posts %></div>
 
 <% if @session[:user_id] == 1 %>

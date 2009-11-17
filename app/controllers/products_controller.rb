@@ -3,15 +3,6 @@ class ProductsController < ApplicationController
   before_filter :login_as_admin , :except => [:index, :show]
   layout 'posts'
 
-  @@brand_index = Brand.all(:conditions => "delete_flg is null", 
-                            :order => "listed_count DESC", 
-                            :limit => 20
-                            )
-  @@blog_index = Blog.all(:conditions => "delete_flg is null", 
-                          :order => "listed_count DESC", 
-                          :limit => 20
-                          )
-
   # GET /products
   # GET /products.xml
   def index

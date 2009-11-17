@@ -5,6 +5,6 @@ class Post < ActiveRecord::Base
   belongs_to :product
 
   cattr_reader :per_page
-  @@per_page = 10
+  @@per_page = 12
 
 end

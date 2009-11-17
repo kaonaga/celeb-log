@@ -3,13 +3,31 @@
 
 class ApplicationController < ActionController::Base
   include AuthenticatedSystem
-  # require 'uri'
 
   helper :all # include all helpers, all the time
   protect_from_forgery # See ActionController::RequestForgeryProtection for details
 
   # Scrub sensitive parameters from your log
   # filter_parameter_logging :password
+
+  @@brand_index = Brand.all(:conditions => "delete_flg is null", 
+                            :order => "listed_count DESC", 
+                            :limit => 20
+                            )
+  @@blog_index = Blog.all(:conditions => "delete_flg is null", 
+                          :order => "listed_count DESC", 
+                          :limit => 20
+                          )
+
+  @@main_title = "芸能人のブログで話題の商品をさがすならセレブログ"
+  @@main_keyword = ["芸能人", "ブログ"]
+  @@main_description = @@main_title + "です。"
+  year = Time.new.year
+  unless year == 2009
+    @@year = "2009 - " + year.to_s
+  else
+    @@year = year
+  end
 
   def content_thumbnail_highlight(post)
     begin

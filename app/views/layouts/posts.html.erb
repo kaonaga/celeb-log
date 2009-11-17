@@ -8,7 +8,7 @@
   <meta name="keywords" content="<%= @meta_keywords %>" />
   <meta name="description" content="<%= @meta_description %>" />
   <%= stylesheet_link_tag 'scaffold' %>
-  <%= stylesheet_link_tag 'earthlingtwo/style' %>
+  <%= stylesheet_link_tag 'style' %>
 </head>
 <body>
 <div id="wrapper">
@@ -16,16 +16,11 @@
   <div id="page">
     <p style="color: green"><%= flash[:notice] %></p>
     <div id="content">
-      <div class="post">
-        <div class="entry">
-          <%= yield %>
-        </div>
-        <!-- end #entry -->
-      </div>
-      <!-- end #post -->
+      <%= yield %>
     </div>
     <!-- end #content -->
     <%= render :partial => "/layouts/sidebar" %>
+  </div>
   <!-- end #page -->
 </div>
 <!-- end #wrapper -->

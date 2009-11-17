@@ -4,6 +4,16 @@
 </p>
 
 <p>
+  <b>Author:</b>
+  <% unless @ng_word.blog_id.nil? %><%=h @ng_word.blog.author %><% end %>
+</p>
+
+<p>
+  <b>Title:</b>
+  <% unless @ng_word.blog_id.nil? %><%=h @ng_word.blog.title %><% end %>
+</p>
+
+<p>
   <b>Ng word:</b>
   <%=h @ng_word.ng_word %>
 </p>

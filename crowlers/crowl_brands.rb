@@ -5,23 +5,9 @@
 # Watch out for 4℃(ヨンドシー)!
 # Fresh Carma, not Fresh
 
-class CrowlBrands
-  require 'net/http'
-  require 'mysql'
-  require 'date'
-  require 'cgi'
-  require 'nkf'
-  require 'logger'
-  $KCODE = 'UTF8'
+require File.dirname(__FILE__) + "/crowler.rb"
 
-  @@mysql_host = 'localhost'
-  @@mysql_user = 'mysql'
-  @@mysql_password = 'mysqlclient'
-  @@mysql_db = 'celeb-log_development'
-
-  @@logger = Logger.new("/Users/BillEvans/Workspace/celeb-log/log/crowl.log", 'daily')
-  # @@logger = Logger.new("/var/www/html/celeb-log/log/crowl.log", 'daily')
-
+class CrowlBrands < Crowler
   def self.crowl_buyma
     host = 'www.buyma.com'
     index_path = ['/list/fashion.html', 
@@ -70,32 +56,39 @@ class CrowlBrands
   end
 
   def self.insert_brand(name, phonetic, time, category = 0)
-    # object = Mysql::new(@@mysql_host, @@mysql_user, @@mysql_password, @@mysql_db)
-    object = Mysql.init()
-    object.options(Mysql::SET_CHARSET_NAME, "utf8")
-    object.real_connect(@@mysql_host, @@mysql_user, @@mysql_password, @@mysql_db)
+    begin
+      # object = Mysql::new(@@mysql_host, @@mysql_user, @@mysql_password, @@mysql_db)
+      object = Mysql.init()
+      object.options(Mysql::SET_CHARSET_NAME, "utf8")
+      object.real_connect(@@mysql_host, @@mysql_user, @@mysql_password, @@mysql_db)
 
-    if object.query("select id from brands where name = '#{name}' and phonetic = '#{phonetic.gsub("　", "")}'").fetch_hash.nil?
-      object.query("insert into brands (name, phonetic, category, created_at, updated_at) values ('#{name}', '#{phonetic}', #{category}, '#{time}', '#{time}')")
-      # start debug
-      @@logger.debug(name)
-      @@logger.debug(phonetic)
-      @@logger.debug("=> 1 row inserted into brands successfully")
-      @@logger.debug("\r\n")
-      puts name
-      puts phonetic
-      puts "=> 1 row inserted into brands successfully"
-      puts "\r\n"
-      # end debug
-    else
-      # start debug
-      @@logger.debug("#{name} has been already crowled")
-      @@logger.debug("\r\n")
-      puts "#{name} has been already crowled"
-      puts "\r\n"
-      # end debug
+      if object.query("select id from brands where name = '#{name}' and phonetic = '#{phonetic.gsub("　", "")}'").fetch_hash.nil?
+        object.query("insert into brands (name, phonetic, category, created_at, updated_at) values ('#{name}', '#{phonetic}', #{category}, '#{time}', '#{time}')")
+        # start debug
+        @@logger.debug(name)
+        @@logger.debug(phonetic)
+        @@logger.debug("=> 1 row inserted into brands successfully")
+        @@logger.debug("\r\n")
+        puts name
+        puts phonetic
+        puts "=> 1 row inserted into brands successfully"
+        puts "\r\n"
+        # end debug
+      else
+        # start debug
+        @@logger.debug("#{name} has been already crowled")
+        @@logger.debug("\r\n")
+        puts "#{name} has been already crowled"
+        puts "\r\n"
+        # end debug
+      end
+      object.close
+    rescue => error
+      p error
+    rescue Timeout::Error => error
+      p error
+      retry
     end
-    object.close
   end
 end
 

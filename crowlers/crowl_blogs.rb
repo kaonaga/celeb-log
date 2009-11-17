@@ -2,25 +2,15 @@
 # for centos
 # /usr/local/bin/ruby
 
-class CrowlBlogs
-  require 'net/http'
-  require 'mysql'
-  require 'date'
-  require 'logger'
-  $KCODE = 'UTF8'
+require File.dirname(__FILE__) + "/crowler.rb"
 
-  @@mysql_host = 'localhost'
-  @@mysql_user = 'mysql'
-  @@mysql_password = 'mysqlclient'
-  @@mysql_db = 'celeb-log_development'
+class CrowlBlogs < Crowler
   @@crowl_type = {0 => 'official.ameba.jp', 
                   1 => 'www.style-walker.com', 
                   2 => 'www.smooche.jp'#, 
                 # 3 => 'star-studio.jp', 
                 # 4 => 'www2.studio-fumina.com'
                 }
-  @@logger = Logger.new("/Users/BillEvans/Workspace/celeb-log/log/crowl.log", 'daily')
-  # @@logger = Logger.new("/var/www/html/celeb-log/log/crowl.log", 'daily')
 
   def self.crowl_ameblo
     # start iteration for ameblo
@@ -38,9 +28,9 @@ class CrowlBlogs
           m[3].push(genre[0][0])
         end
         # end put tags in hash and reformat
-        author = m[1].gsub("'", "''")
-        phonetic = m[2].gsub("'", "''")
-        title = m[4].gsub("'", "''")
+        author = m[1].gsub("'", "''").gsub("　", "").strip
+        phonetic = m[2].gsub("'", "''").gsub("　", "").strip
+        title = m[4].gsub("'", "''").gsub("　", "").strip
         uri = m[0].gsub("'", "''")
         tags = m[3].join(",").gsub("'", "''")
         crowl_type = 0
@@ -141,22 +131,30 @@ class CrowlBlogs
   end
 
   def self.insert_blog(author, phonetic, tags, uri, title, crowl_type, time)
-    # object = Mysql::new(@@mysql_host, @@mysql_user, @@mysql_password, @@mysql_db)
-    object = Mysql.init()
-    object.options(Mysql::SET_CHARSET_NAME, "utf8")
-    object.real_connect(@@mysql_host, @@mysql_user, @@mysql_password, @@mysql_db)
+    begin
+      # object = Mysql::new(@@mysql_host, @@mysql_user, @@mysql_password, @@mysql_db)
+      object = Mysql.init()
+      object.options(Mysql::SET_CHARSET_NAME, "utf8")
+      object.real_connect(@@mysql_host, @@mysql_user, @@mysql_password, @@mysql_db)
 
-    blog_id = object.query("select id from blogs where uri = '#{uri}'").fetch_hash
-    if blog_id.nil?
-      object.query("insert into blogs (author, phonetic, title, uri, tags, crowl_type, last_update, created_at, updated_at) values('#{author}', '#{phonetic}', '#{title}', '#{uri}', '#{tags}', '#{crowl_type}', 'NULL', '#{time}', '#{time}')")
-    else
-      object.query("update blogs set author = '#{author}', phonetic = '#{phonetic}', title = '#{title}', uri = '#{uri}', tags = '#{tags}', crowl_type = '#{crowl_type}', updated_at = '#{time}' where uri = '#{uri}'")
-      # start debug
-      @@logger.debug("this blog has been already listed as id:#{blog_id['id']}")
-      puts "this blog has been already listed as id:#{blog_id['id']}"
-      # end debug
+      blog_id = object.query("select id from blogs where uri = '#{uri}'").fetch_hash
+      if blog_id.nil?
+        object.query("insert into blogs (author, phonetic, title, uri, tags, crowl_type, last_update, created_at, updated_at) values('#{author}', '#{phonetic}', '#{title}', '#{uri}', '#{tags}', '#{crowl_type}', 'NULL', '#{time}', '#{time}')")
+      else
+        object.query("update blogs set author = '#{author}', phonetic = '#{phonetic}', title = '#{title}', uri = '#{uri}', tags = '#{tags}', crowl_type = '#{crowl_type}', updated_at = '#{time}' where uri = '#{uri}'")
+        # start debug
+        @@logger.debug("this blog has been already listed as id:#{blog_id['id']}")
+        puts "this blog has been already listed as id:#{blog_id['id']}"
+        # end debug
+      end
+      object.close
+    rescue => error
+      p error
+      next_page_flg = nil
+    rescue Timeout::Error => error
+      p error
+      retry
     end
-    object.close
   end
 
 end

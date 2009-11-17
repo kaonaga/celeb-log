@@ -20,8 +20,6 @@ ActiveRecord::Schema.define(:version => 20091110115356) do
     t.datetime "updated_at"
   end
 
-  add_index "blog_entries", ["content"], :name => "fulltext_content"
-
   create_table "blogs", :force => true do |t|
     t.string   "author"
     t.string   "phonetic"
@@ -48,6 +46,7 @@ ActiveRecord::Schema.define(:version => 20091110115356) do
 
   create_table "ng_words", :force => true do |t|
     t.integer  "brand_id"
+    t.integer  "blog_id"
     t.string   "ng_word"
     t.integer  "ng_type"
     t.datetime "created_at"

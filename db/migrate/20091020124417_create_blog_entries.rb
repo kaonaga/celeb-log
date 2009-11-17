@@ -9,7 +9,7 @@ class CreateBlogEntries < ActiveRecord::Migration
 
       t.timestamps
     end
-    execute "CREATE FULLTEXT INDEX fulltext_content ON blog_entries (content)"
+    execute "CREATE FULLTEXT INDEX fulltext_content ON blog_entries (content(30))"
   end
 
   def self.down

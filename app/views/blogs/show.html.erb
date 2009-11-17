@@ -1,27 +1,24 @@
-<p>
-  <b>Author:</b>
-  <%= link_to @blog.author, @blog %>
-</p>
-
-<p>
-  <b>Phonetic:</b>
-  <%= link_to @blog.phonetic, @blog %>
-</p>
-
-<p>
-  <b>Title:</b>
-  <%= link_to @blog.title, @blog %>
-</p>
-
-<p>
-  <b>Listed count:</b>
-  <%= link_to @blog.listed_count, @blog %>
-</p>
-
-<table>
+<div class="post">
+  <span class="thumbnail"><%= link_to image_tag("http://capture.heartrails.com/300x225/shadow?#{@blog.uri}", 
+      :title => "#{@blog.author} オフィシャルブログ #{@blog.title}", 
+      :alt => "#{@blog.author} オフィシャルブログ #{@blog.title}のスクリーンショット"), @blog.uri, :target => :blank %></span>
+  <div class="blog_description">
+    <h1><span class="author"><%= link_to @blog.author, @blog %><br>
+      (<%= link_to @blog.phonetic, @blog %>)</span> さんが<br>
+    <span class="title"><%= @blog.title %></span><br>
+    で紹介している商品が <span class="listed_count"><%= @blog.listed_count %></span> 件ヒットしました。</h1>
+  </div>
+  <!-- end post_description -->
+</div>
+<!-- end post -->
+<br>
+<table class="blog_table">
+  <th class="blog_table_th">タイトル</th>
+  <th class="blog_table_th">ブランド</th>
+  <th>本文</th>
+  <th class="blog_table_th">投稿日</th>
 <% @posts.each do |post| %>
   <tr>
-    <td><%= link_to post.blog.author, post.blog %></td>
     <td><%= link_to post.blog_entry.title, post %></td>
     <td><%= link_to post.brand.name, post %><br>(<%= link_to post.brand.phonetic, post %>)</td>
     <!-- <td>
@@ -32,7 +29,7 @@
     <td><%= link_to post.blog_entry.content, post %></td>
     <td><%=h post.posted_date %></td>
     <% if @session[:user_id] == 1 %>
-      <td><%= link_to 'NG Word', :controller => :ng_words, :action => :new, :id => post.brand.id %></td>
+      <td><%= link_to 'NG Word', :controller => :ng_words, :action => :new, :id => post.brand.id, :blog_id => post.blog_id %></td>
       <td><%= link_to 'Destroy', post, :confirm => 'Are you sure?', :method => :delete %></td>
     <% end %>
   </tr>
@@ -46,4 +43,3 @@
   <%= link_to 'Destroy', @blog, :confirm => 'Are you sure?', :method => :delete %> |
   <%= link_to 'NG Word Index', ng_words_path %> |
 <% end %>
-<%= link_to 'Back', :back %>

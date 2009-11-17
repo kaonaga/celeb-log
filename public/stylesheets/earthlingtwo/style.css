@@ -1,9 +1,3 @@
-/*
-Design by Free CSS Templates
-http://www.freecsstemplates.org
-Released for free under a Creative Commons Attribution 2.5 License
-*/
-
 body {
 	margin: 0;
 	padding: 0;
@@ -23,6 +17,7 @@ h1, h2, h3 {
 
 h1 {
 	font-size: 2em;
+	font-family: Georgia, "Times New Roman", Times, serif;
 }
 
 h2 {
@@ -61,17 +56,17 @@ h2 a {
 #wrapper {
 	margin: 0px;
 	padding: 0px;
-	background: url(images/img02.jpg) repeat-x left top;
 }
 
 /* Header */
 
 #header {
-	width: 1000px;
+	width: 800px;
 	height: 235px;
-	margin: 0 auto;
 	padding: 0px;
-	background: url(images/img03.jpg) no-repeat left top;
+	margin-top: 0;
+	margin-right: auto;
+	margin-left: auto;
 }
 
 /* Logo */
@@ -162,11 +157,14 @@ h2 a {
 /* Menu */
 
 #menu {
-	width: 1000px;
-	height: 65px;
-	margin: 0 auto;
-	padding: 0;
+	width: 800px;
+	height: 59px;
 	background: url(images/img04.jpg) no-repeat left top;
+	margin-top: 0;
+	margin-right: auto;
+	margin-bottom: 0;
+	margin-left: auto;
+	padding: 0;
 }
 
 #menu ul {
@@ -184,10 +182,9 @@ h2 a {
 #menu a {
 	display: block;
 	width: 120px;
-	height: 39px;
+	height: 34px;
 	margin-left: 10px;
 	padding-top: 15px;
-	background: url(images/img05.jpg) repeat-x left top;
 	font-family: Georgia, "Times New Roman", Times, serif;
 	text-decoration: none;
 	text-align: center;
@@ -195,6 +192,10 @@ h2 a {
 	font-weight: normal;
 	color: #FFFFFF;
 	border: none;
+	background-image: url(images/img05.jpg);
+	background-repeat: repeat-x;
+	background-position: left top;
+	margin-top: 20px;
 }
 
 #menu a:hover, #menu .current_page_item a {
@@ -210,31 +211,32 @@ h2 a {
 /* Page */
 
 #page {
-	width: 900px;
-	margin: 0px auto;
-	padding: 40px 50px 0px 50px;
-	background: #FFFFFF;
+	width: 800px;
+	background: #F9EDDF;
+	margin-right: auto;
+	margin-left: auto;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	padding-top: 10px;
+	padding-bottom: 0px;
 }
 
 /* Content */
 
 #content {
 	float: right;
-	width: 570px;
-	padding: 0px 0px 0px 0px;
+	width: 560px;
+	padding-top: 20px;
+	margin-right: 10px;
 }
 
-.post {
-	margin-bottom: 15px;
+.posts {
+	padding-left: 10px;
+	padding-right: 10px;
+	margin-right: 10px;
 }
 
-.post-bgtop {
-}
-
-.post-bgbtm {
-}
-
-.post .title {
+.posts .title {
 	height: 38px;
 	margin-bottom: 10px;
 	letter-spacing: -.5px;
@@ -242,12 +244,12 @@ h2 a {
 	color: #493E2B;
 }
 
-.post .title a {
+.posts .title a {
 	color: #493E2B;
 	border: none;
 }
 
-.post .meta {
+.posts .meta {
 	margin: -10px 0px 0px 0px;
 	padding: 0px 0px 10px 0px;
 	letter-spacing: -1px;
@@ -257,28 +259,43 @@ h2 a {
 	font-family: Georgia, "Times New Roman", Times, serif;
 }
 
-.post .meta .date {
+.posts .meta .date {
 	float: left;
 }
 
-.post .meta .posted {
+.posts .meta .posted {
 	float: right;
 }
 
-.post .meta a {
+.posts .meta a {
 }
 
-.post .entry {
+.posts .entry {
 	text-align: justify;
+	margin-bottom: 10px;
+	padding-bottom: 10px;
+	margin-top: 10px;
+	background-color: #FAD0F7;
+	padding-top: 10px;
+}
+.posts .entry .author {
+	font-size: 1.2em;
 }
 
-.post .entry .title {
+.posts .entry .title {
 	background: url(images/img08.jpg) no-repeat left bottom;
+	font-size: 1.1em;
 }
-
-.post .entry h1 {
-	margin-bottom: 20px;
-	line-height: 1.2em;
+.posts .entry .brand {
+	font-size: 1.1em;
+}
+.posts .entry .content {
+}
+.posts .entry .date {
+	font-size: 0.8em;
+}
+.posts .entry .admin_navi {
+	text-align: right;
 }
 
 .recommendations {
@@ -338,9 +355,10 @@ h2 a {
 
 #sidebar {
 	float: left;
-	width: 273px;
-	padding: 0px;
+	width: 200px;
 	color: #787878;
+	margin-left: 10px;
+	padding-left: 10px;
 }
 
 #sidebar ul {
@@ -368,8 +386,7 @@ h2 a {
 
 #sidebar h2 {
 	height: 65px;
-	background: url(images/img09.jpg) no-repeat left bottom;
-	letter-spacing: -.5px;
+	letter-spacing: -0.5px;
 	font-size: 28px;
 	color: #493E2B;
 }
@@ -391,9 +408,22 @@ h2 a {
 #sidebar a:hover {
 }
 
+#ad_code {
+	width:200px;
+	text-align:center;
+	background-image: url(file:/images/adsense/PapersExample.png);
+	background-repeat: no-repeat;
+	background-position: center center;
+	height: 200px;
+	padding-top: 9px;
+	padding-right: 16px;
+	padding-bottom: 17px;
+	padding-left: 10px;
+}
+	
 /* Calendar */
 
-#calendar {
+/*#calendar {
 }
 
 #calendar_wrap {
@@ -410,25 +440,25 @@ h2 a {
 
 #calendar #next {
 	text-align: right;
-}
+}*/
 
 /* Footer */
 
 #footer-content {
 	clear: both;
-	width: 900px;
-	height: 255px;
-	background: url(images/img15.jpg) no-repeat left top;
+	width: 100%;
+	height: 200px;
 	font-size: 12px;
 	color: #887450;
 	margin-top: 0;
 	margin-right: auto;
 	margin-bottom: 0;
 	margin-left: auto;
-	padding-top: 50px;
+	padding-top: 10px;
 	padding-right: 50px;
 	padding-bottom: 0px;
 	padding-left: 50px;
+	background-color: #FFFFFF;
 }
 
 #footer-content .column1 {
@@ -461,9 +491,17 @@ h2 a {
 
 #footer {
 	height: 50px;
-	margin: 0 auto;
-	padding: 0px 0 15px 0;
 	font-family: Arial, Helvetica, sans-serif;
+	margin-top: 0;
+	margin-right: auto;
+	margin-bottom: 0;
+	margin-left: auto;
+	padding-top: 10px;
+	padding-right: 0;
+	padding-bottom: 15px;
+	padding-left: 0;
+	background-color: #FFFFFF;
+	width: 100%;
 }
 
 #footer p {

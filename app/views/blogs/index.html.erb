@@ -1,14 +1,20 @@
-<h1>Listing blogs</h1>
+<h1>
+  商品が紹介されている芸能人ブログ一覧
+</h1>
 
-<table>
+<table class="blog_table">
   <tr>
-    <th>Author</th>
-    <th>Entry Title</th>
-    <th>Listed count</th>
+    <th></th>
+    <th>ブロガー</th>
+    <th>タイトル</th>
+    <th>掲載数</th>
   </tr>
 
 <% @blogs.each do |blog| %>
   <tr>
+    <th class="thumbnail"><%= link_to image_tag("http://capture.heartrails.com/tiny/shadow?#{blog.uri}", 
+        :title => "#{blog.author} オフィシャルブログ #{blog.title}", 
+        :alt => "#{blog.author} オフィシャルブログ #{blog.title}のスクリーンショット"), blog %></th>
     <td><%= link_to blog.author, blog %></td>
     <td><%= link_to blog.title, blog %></td>
     <td><%= link_to blog.listed_count, blog %></td>

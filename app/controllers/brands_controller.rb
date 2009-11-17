@@ -3,25 +3,6 @@ class BrandsController < ApplicationController
   before_filter :login_as_admin , :except => [:index, :show]
   layout 'posts'
 
-  @@brand_index = Brand.all(:conditions => "delete_flg is null", 
-                            :order => "listed_count DESC", 
-                            :limit => 20
-                            )
-  @@blog_index = Blog.all(:conditions => "delete_flg is null", 
-                          :order => "listed_count DESC", 
-                          :limit => 20
-                          )
-
-  @@main_title = "芸能人のブログで話題のブランドをさがすならセレブログ"
-  @@main_keyword = ["芸能人", "ブログ"]
-  @@main_description = @@main_title + "です。"
-  year = Time.new.year
-  unless year == 2009
-    @@year = "2009 - " + year.to_s
-  else
-    @@year = year
-  end
-
   # GET /brands
   # GET /brands.xml
   def index
